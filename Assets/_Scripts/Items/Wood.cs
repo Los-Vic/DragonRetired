@@ -13,10 +13,12 @@ public class Wood : AbstractGrid {
 	private Rigidbody2D m_rb;
 	private float timeCounter;
 	private bool fireOnce;
+	private GameObject woodLight;
 
 	void Awake()
 	{
 		sp = GetComponent<SpriteRenderer> ();
+		woodLight = transform.FindChild ("WoodLight").gameObject;
 	}
 	void Start()
 	{
@@ -50,6 +52,7 @@ public class Wood : AbstractGrid {
 		}
 		else {
 			onFireNow = true;
+			woodLight.SetActive (true);
 			sp.sprite = sprites [1];
 		}
 
