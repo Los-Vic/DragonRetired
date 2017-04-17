@@ -112,7 +112,7 @@ public class GelSkill :MonoBehaviour,ISkill{
 		coll = Physics2D.OverlapPoint (new Vector2 (tmp.x , tmp.y-0.6f),Utility.lmForSkill);
 		if (coll != null) {
 			ag = coll.GetComponent<AbstractGrid> ();
-			if (ag != null && ag.woodFriendly)
+			if (ag != null && (ag.ability&Ability.WoodFriendly)!=0)
 				return true;
 		}
 

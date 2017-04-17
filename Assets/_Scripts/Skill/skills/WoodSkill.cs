@@ -114,28 +114,28 @@ public class WoodSkill : MonoBehaviour,ISkill{
 		coll = Physics2D.OverlapPoint (new Vector2 (tmp.x + 1, tmp.y),Utility.lmForSkill);
 		if (coll != null) {
 			ag = coll.GetComponent<AbstractGrid> ();
-			if (ag != null && ag.woodFriendly)
+			if (ag != null && (ag.ability&Ability.WoodFriendly)!=0)
 				return true;
 		}
 
 		coll = Physics2D.OverlapPoint (new Vector2 (tmp.x - 1, tmp.y),LayerMask.GetMask("AbstractGrid"));
 		if (coll != null) {
 			ag = coll.GetComponent<AbstractGrid> ();
-			if (ag != null && ag.woodFriendly)
+			if (ag != null && (ag.ability&Ability.WoodFriendly)!=0)
 				return true;
 		}
 
 		coll = Physics2D.OverlapPoint (new Vector2 (tmp.x , tmp.y+1),LayerMask.GetMask("AbstractGrid"));
 		if (coll != null) {
 			ag = coll.GetComponent<AbstractGrid> ();
-			if (ag != null && ag.woodFriendly)
+			if (ag != null && (ag.ability&Ability.WoodFriendly)!=0)
 				return true;
 		}
 
 		coll = Physics2D.OverlapPoint (new Vector2 (tmp.x , tmp.y-1),LayerMask.GetMask("AbstractGrid"));
 		if (coll != null) {
 			ag = coll.GetComponent<AbstractGrid> ();
-			if (ag != null && ag.woodFriendly)
+			if (ag != null && (ag.ability&Ability.WoodFriendly)!=0)
 				return true;
 		}
 

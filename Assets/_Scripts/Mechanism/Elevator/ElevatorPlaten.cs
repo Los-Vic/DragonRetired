@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ElevatorPlaten : AbstractGrid {
 
+	#region Variables
 	public bool __________________________;
 	public ElevatorPlaten theOther;
 	public float totalMass;
@@ -17,9 +18,11 @@ public class ElevatorPlaten : AbstractGrid {
 	private bool onTop; // 是否到顶，且速度向上
 	private float curV; //速度
 
-
+	#endregion
+	#region Unity Events
 	void Start()
 	{
+		Initialization ();
 		totalMass = 0;
 		rbOver = new List<Rigidbody2D> ();
 
@@ -43,7 +46,9 @@ public class ElevatorPlaten : AbstractGrid {
 			MovePlaten (curV);
 
 	}
+	#endregion
 
+	#region Methods
 	//盘子可以动么
 	public bool PlatenCanMove()
 	{
@@ -54,7 +59,7 @@ public class ElevatorPlaten : AbstractGrid {
 	private void CaculateTotalMass()
 	{
 
-		if (antiGravity)
+		if (state == State.AntiGing)
 			totalMass = 0;
 		else
 			totalMass = platenWeight;
@@ -171,14 +176,21 @@ public class ElevatorPlaten : AbstractGrid {
 	}
 	*/
 
-	public  override void OnFired(){}  //被燃烧时调用
-	public override void OnFreezed(){} //被冰冻
-	public  override void OnAntiGravity() //实施反重力
+	public override void Initialization ()
 	{
-		if (!antiGravity) {
-			antiGravity = true;
+		state = State.Normal;
+		ability = Ability.AntiGable;
+	}
+	public  override bool OnFired(){return false;}  //被燃烧时调用
+	public override bool OnFreezed(){return false;} //被冰冻
+	public  override bool OnAntiGravity() //实施反重力
+	{
+		if (state == State.Normal) {
+			state = State.AntiGing;
 			StartCoroutine (AntiGravityEvent ());
+			return true;
 		}
+		return false;
 	}
 	public  override void InteractWithPrince(){}//和王子相互作用
 
@@ -187,8 +199,8 @@ public class ElevatorPlaten : AbstractGrid {
 	{
 		
 		yield return new WaitForSeconds (3);// 3s 反重力效果
-		antiGravity = false;
+		state = State.Normal;
 		Debug.Log ("platen antiG end");
 	}
-
+	#endregion
 }

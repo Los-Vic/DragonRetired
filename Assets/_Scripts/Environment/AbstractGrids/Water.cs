@@ -2,18 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//地刺陷阱
-public class Spikeweed : AbstractGrid {
+//水类
+public class Water : AbstractGrid {
+
+	#region Variables
+	public Sprite[] sprites;//0: normal , 1:ice
+
+	private SpriteRenderer sp;
+	private BoxCollider2D b_coll;
+
+	public bool startWithFreezed;
+	#endregion
 
 	#region Unity Events
+	void Awake()
+	{
+		sp = GetComponent<SpriteRenderer> ();
+		b_coll = GetComponent<BoxCollider2D> ();
+	}
 	void Start()
 	{
 		Initialization ();
+		if (startWithFreezed)
+			OnFreezed ();
 	}
 	#endregion
 
 	#region Methods
-
+	/// <summary>
+	/// Initialization this instance.
+	/// </summary>
 	public override void Initialization ()
 	{
 		state = State.Normal;
@@ -26,19 +44,23 @@ public class Spikeweed : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
-			Debug.Log ("Trap is fired");
+			sp.sprite = sprites [0];
+			b_coll.isTrigger = true;
+			Debug.Log ("Water is fired");
 			return true;
 		}
 		return false;
 	}
 	/// <summary>
-	/// 冰冻魔法，冻结,失效
+	/// 冰冻魔法，冻结
 	/// </summary>
 	public  override bool OnFreezed()
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
-			Debug.Log ("Trap is freezed");
+			sp.sprite = sprites [1];
+			b_coll.isTrigger = false;
+			Debug.Log ("Water is freezed");
 			return true;
 		}
 		return false;
@@ -48,17 +70,12 @@ public class Spikeweed : AbstractGrid {
 	/// </summary>
 	public override  bool OnAntiGravity()
 	{
-	//Debug.Log ("Stone is antigravity");
+		Debug.Log ("Water is antiG");
 		return false;
-	}
-
-	void OnTriggerEnter2D(Collider2D coll)
-	{
-		if(state == State.Normal && coll.tag =="Player")
-			Debug.Log ("Kill creature");
 	}
 	public override void InteractWithPrince()
 	{
 	}
 	#endregion
+
 }
