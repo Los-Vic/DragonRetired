@@ -7,17 +7,21 @@ using UnityEngine;
 
 public class Rock : AbstractGrid {
 
+	#region Variables
 	public Sprite[] sprites; // 0 : normal ; 1: ice
 
 	public bool onElevator; // 是否在盘子上
 
 	private Rigidbody2D m_rb;
 	private SpriteRenderer sp;
-	private float originGScale;
+	private float originMass;
+
 
 	//
 	private ParticleSystem ps;
+	#endregion
 
+	#region Unity Events
 	void Awake()
 	{
 		sp = GetComponent<SpriteRenderer> ();
@@ -27,59 +31,69 @@ public class Rock : AbstractGrid {
 
 	void Start()
 	{
-		destructable = true; 
-		antiGable = true;
-		originGScale = m_rb.gravityScale;
-
+		Initialization ();
 	}
+	#endregion
 
+	public override void Initialization ()
+	{
+		state = State.Normal;
+		ability = Ability.Flammable | Ability.Freezable | Ability.AntiGable;
+		originMass = m_rb.mass;
+	}
 	/// <summary>
 	/// 火焰魔法，解冻
 	/// </summary>
-	public  override void OnFired()
+	public  override bool OnFired()
 	{
-		sp.sprite = sprites [0];
-		freezed = false;
-		m_rb.bodyType = RigidbodyType2D.Dynamic;
-		Debug.Log ("Rock is fired");
+		if (state == State.Freezing) {
+			state = State.Normal;
+			sp.sprite = sprites [0];
+			Debug.Log ("Rock is fired");
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
-	/// 冰冻魔法，冻结, 定在空中，可被王子击碎
+	/// 冰冻魔法，冻结,，可被王子击碎
 	/// </summary>
-	public  override void OnFreezed()
+	public  override bool OnFreezed()
 	{
-		freezed = true;
-		sp.sprite = sprites [1];
-		m_rb.velocity = Vector2.zero;
-		m_rb.bodyType = RigidbodyType2D.Static;
-		Debug.Log ("Rock is freezed");
+		if (state == State.Normal) {
+			state = State.Freezing;
+			sp.sprite = sprites [1];
+			Debug.Log ("Rock is freezed");
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
 	/// 反重力,下落速度变慢，无法触发开关，可浮到水面
 	/// </summary>
-	public override  void OnAntiGravity()
+	public override  bool OnAntiGravity()
 	{
-		if (freezed)
-			Debug.Log ("Rock is freezed, antiG is invalid");
-		else
-		{
-		Debug.Log ("Rock is antiG");
-		StartCoroutine (AntiGravityEvent()); 
+		if (state == State.Normal) {
+			state = State.AntiGing;
+			Debug.Log ("Rock is antiG");
+			StartCoroutine (AntiGravityEvent ());
+			return true;
 		}
+		return false;
 	}
 
 
 	public override void InteractWithPrince()
 	{
-		Debug.Log ("rock with prince");
-		if (freezed)
+		if (state==State.Freezing)
 			Destroy (gameObject);
 	}
+
 	private IEnumerator AntiGravityEvent()
 	{
-		m_rb.gravityScale = originGScale/10.0f;
+		m_rb.mass = originMass/10.0f;
 		yield return new WaitForSeconds (3);// 3s 重力效果减半
-		m_rb.gravityScale = originGScale;
+		m_rb.mass = originMass;
+		state = State.Normal;
 		Debug.Log ("rock antiG end");
 	}
 
@@ -88,8 +102,8 @@ public class Rock : AbstractGrid {
 	void OnCollisionEnter2D(Collision2D coll)
 	{
 		if (coll != null) {
-			Rock rock = coll.collider.GetComponent<Rock> ();
-			if (rock !=null ) {
+			if (coll.collider.tag == "Rock" ) {
+				Rock rock = coll.collider.GetComponent<Rock> ();
 				if (rock.onElevator == true)
 					onElevator = true;
 			}
@@ -99,6 +113,9 @@ public class Rock : AbstractGrid {
 		}
 	}
 
+	/// <summary>
+	/// Destroies the on explosion.
+	/// </summary>
 	public void DestroyOnExplosion()
 	{
 		

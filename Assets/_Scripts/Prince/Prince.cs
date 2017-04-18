@@ -6,6 +6,7 @@ using UnityEngine;
 //王子类
 public class Prince : AbstractGrid {
 
+	#region Variables
 	//private int hp;
 	private Rigidbody2D m_rb;
 	private bool faceRight;
@@ -13,6 +14,9 @@ public class Prince : AbstractGrid {
 
 	public bool onElevator;
 
+	#endregion
+
+	#region Unity Events
 	void Awake()
 	{
 		m_rb = GetComponent<Rigidbody2D> ();
@@ -20,35 +24,57 @@ public class Prince : AbstractGrid {
 	}
 	void Start()
 	{
-		antiGable = true;
-		flammable = true;
+		Initialization ();
+	}
+	#endregion
+
+	#region Methods
+
+	public override void Initialization ()
+	{
+		state = State.Normal;
+		ability = Ability.Flammable | Ability.Freezable | Ability.AntiGable;
 		faceRight = true;
 	}
-
 	/// <summary>
 	/// 火焰魔法，受伤掉血，（冻结时）解冻
 	/// </summary>
-	public  override void OnFired()
+	public  override bool OnFired()
 	{
-		freezed = false;
-		hpM.HpAdd (-1);
-		Debug.Log ("Prince is fired");
+		if (state == State.Normal) {
+			hpM.HpAdd (-1);
+			Debug.Log ("Prince is fired");
+			return true;
+		} else if (state == State.Freezing) {
+			state = State.Normal;
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
 	/// 冰冻魔法，冻结掉血，数秒后解冻
 	/// </summary>
-	public  override void OnFreezed()
+	public  override bool OnFreezed()
 	{
-		freezed = true;
-		Debug.Log ("Prince is freezed");
+		if (state == State.Normal) {
+			state = State.Freezing;
+			Debug.Log ("Prince is freezed");
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
 	/// 反重力，数秒内下落速度减慢，无法触发机关
 	/// </summary>
-	public override  void OnAntiGravity()
+	public override  bool OnAntiGravity()
 	{
-		StartCoroutine (AntiGEvent());
-		Debug.Log ("Prince is antigravity");
+		if (state == State.Normal) {
+			state = State.AntiGing;
+			StartCoroutine (AntiGEvent ());
+			Debug.Log ("Prince is antigravity");
+			return true;
+		}
+		return false;
 	}
 
 
@@ -69,9 +95,10 @@ public class Prince : AbstractGrid {
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
-		m_rb.gravityScale = 1;
+		m_rb.mass = 1.0f/1.2f;
 		yield return new WaitForSeconds (5);
-		m_rb.gravityScale = 3;
+		m_rb.mass = 1;
+		state = State.Normal;
 		Debug.Log ("Prince antiG end");
 	}
 
@@ -162,5 +189,5 @@ public class Prince : AbstractGrid {
 		}
 
 	}
-		
+	#endregion
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 //凝胶类
 public class Gel : AbstractGrid {
 
+	#region Variables
 	public Sprite[] sprites; // 0: left , 1:right ,2:fire left, 3:fire right
 	public float explodeForce;
 	[SerializeField]private bool isLeft;
@@ -12,59 +13,65 @@ public class Gel : AbstractGrid {
 
 	private bool isValid; //避免连续发射
 
+	#endregion
+
+	#region Unity Events
 	void Awake()
 	{
 		sp = GetComponent<SpriteRenderer> ();
 	}
 	void Start()
 	{
-		destructable = true; 
-		flammable = true;
-		isValid = true;
-
-	}
-	void Update()
-	{
-		#if UNITY_EDITOR
-			
-		#endif
-
+		Initialization ();
 	}
 	void FixedUpdate()
 	{
 		if(isValid)
 			CheckPlayerIn ();
 	}
+	#endregion
+
+	#region Methods
+
+	public override void Initialization ()
+	{
+		state = State.Normal;
+		ability = Ability.Flammable;
+		isValid = true;
+	}
 
 	/// <summary>
 	/// 火焰魔法，燃烧，0.5s后引燃相邻可燃物，1s后爆炸，同时引爆相邻凝胶，摧毁相邻木块、弹开石头、杀死生物
 	/// </summary>
-	public  override void OnFired()
+	public  override bool OnFired()
 	{
-		freezed = false;
-
-		if (isLeft)
-			sp.sprite = sprites [2];
-		else
-			sp.sprite = sprites [3];
-		
-		StartCoroutine (FireEvent());
-		Debug.Log ("Gel is fired");
+		if (state == State.Normal) {
+			if (isLeft)
+				sp.sprite = sprites [2];
+			else
+				sp.sprite = sprites [3];
+			state = State.Firing;
+			StartCoroutine (FireEvent ());
+			Debug.Log ("Gel is fired");
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
-	/// 冰冻魔法，熄灭
+	/// 冰冻魔法，无效
 	/// </summary>
-	public  override void OnFreezed()
+	public  override bool OnFreezed()
 	{
-		freezed = true;
-		Debug.Log ("Gel is freezed");
+		Debug.Log ("Gel can't be freezed");
+		return false;
 	}
 	/// <summary>
 	/// 反重力无效
 	/// </summary>
-	public override  void OnAntiGravity()
+	public override  bool OnAntiGravity()
 	{
 		Debug.Log ("Gel is antigravity");
+		return false;
 	}
 	public override void InteractWithPrince()
 	{
@@ -116,7 +123,7 @@ public class Gel : AbstractGrid {
 		foreach (Collider2D coll in colls) {
 			if (coll.gameObject != gameObject) {
 				AbstractGrid ag = coll.GetComponent<AbstractGrid> ();
-				if (ag != null &&ag.flammable&&!ag.onFireNow)
+				if (ag != null &&(ag.ability&Ability.Flammable)!=0)
 					ag.OnFired ();
 			}
 		}
@@ -171,4 +178,6 @@ public class Gel : AbstractGrid {
 		else
 			sp.sprite = sprites [1];
 	}
+
+	#endregion
 }

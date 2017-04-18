@@ -5,43 +5,54 @@ using UnityEngine;
 //宝箱类
 public class Treasure : AbstractGrid {
 
+
+	#region Unity Events
 	void Start()
 	{
-		destructable = true; 
-		flammable = true;
+		Initialization ();
 	}
+	#endregion
 
+	#region Methods
+
+	public override void Initialization ()
+	{
+		state = State.Normal;
+		ability = Ability.Flammable;
+	}
 	/// <summary>
 	/// 火焰魔法，燃烧，半秒后点燃周围物体，1s后宝箱自毁（里面的道具也消失）
 	/// </summary>
-	public  override void OnFired()
+	public  override bool OnFired()
 	{
-		freezed = false;
-		StartCoroutine (FireEvent());
-		onFireNow = true;
-		Debug.Log ("Treasure is fired");
+		if (state == State.Normal) {
+			StartCoroutine (FireEvent ());
+			Debug.Log ("Treasure is fired");
+			return true;
+		}
+		return false;
 	}
 	/// <summary>
-	/// 冰冻魔法，熄灭
+	/// 冰冻魔法，无效
 	/// </summary>
-	public  override void OnFreezed()
+	public  override bool OnFreezed()
 	{
-		freezed = true;
-		Debug.Log ("Treasure is freezed");
+		Debug.Log ("Treasure can‘t freezed");
+		return false;
 	}
 	/// <summary>
 	/// 反重力无效
 	/// </summary>
-	public override  void OnAntiGravity()
+	public override  bool OnAntiGravity()
 	{
 		Debug.Log ("Treasure is antigravity");
+		return false;
 	}
 	/// <summary>
 	/// 王子打开后会怎样
 	/// </summary>
 	public override void InteractWithPrince()
 	{
-
 		DestroySelf ();
 	}
 
@@ -57,7 +68,7 @@ public class Treasure : AbstractGrid {
 			if (coll.gameObject != gameObject) 
 			{
 				AbstractGrid ag = coll.GetComponent<AbstractGrid> ();
-				if (ag != null && ag.flammable &&!ag.onFireNow)
+				if (ag != null &&(ag.ability&Ability.Flammable )!=0)
 					ag.OnFired ();
 			}
 		}
@@ -79,5 +90,5 @@ public class Treasure : AbstractGrid {
 		Destroy (gameObject);
 	}
 		
-
+	#endregion
 }

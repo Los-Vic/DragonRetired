@@ -5,6 +5,7 @@ Shader "P&D/TorchLight"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_Glow("Light Intensity",Float) = 1
 	}
 	SubShader
 	{
@@ -35,6 +36,7 @@ Shader "P&D/TorchLight"
 			};
 
 			sampler2D _MainTex;
+			float _Glow;
 			
 			v2f vert (appdata v)
 			{
@@ -48,7 +50,7 @@ Shader "P&D/TorchLight"
 			{
 				// sample the texture
 				fixed4 col = tex2D(_MainTex, i.uv);
-
+				col.a = pow(col.a,_Glow);
 				return col;
 			}
 			ENDCG

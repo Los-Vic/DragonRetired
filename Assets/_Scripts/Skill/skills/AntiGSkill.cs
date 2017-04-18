@@ -70,11 +70,8 @@ public class AntiGSkill : MonoBehaviour,ISkill{
 	{
 		if (isReady) {
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid ();
-			if (coll != null) {
-				coll.GetComponent<AbstractGrid> ().OnAntiGravity ();
-				return true;
-			} else
-				return false;
+			if (coll != null) 
+				return coll.GetComponent<AbstractGrid> ().OnAntiGravity ();
 		}
 		return false;
 	}

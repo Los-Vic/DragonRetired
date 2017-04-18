@@ -84,7 +84,7 @@ public class RockSkill : MonoBehaviour,ISkill{
 	{
 		if (isReady) {
 			Vector3 pos = Utility.SnappingGrid (Input.mousePosition);
-			GameObject newRock = Instantiate (rockPrefab, pos, Quaternion.identity);
+			Instantiate (rockPrefab, pos, Quaternion.identity);
 			isReady = false;
 			return true;
 		} else

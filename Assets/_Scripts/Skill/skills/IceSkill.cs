@@ -67,13 +67,10 @@ public class IceSkill : MonoBehaviour,ISkill{
 	{
 		if (isReady) {
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid ();
-			if (coll != null) {
-				coll.GetComponent<AbstractGrid> ().OnFreezed ();
-				return true;
-			} else
-				return false;
-		} else
-			return false;
+			if (coll != null)
+				return coll.GetComponent<AbstractGrid> ().OnFreezed ();
+		}
+		return false;
 	}
 
 	/// <summary>
