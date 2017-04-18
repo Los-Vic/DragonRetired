@@ -82,7 +82,7 @@ public class WoodSkill : MonoBehaviour,ISkill{
 	{
 		if (isReady) {
 			Vector3 pos = Utility.SnappingGrid (Input.mousePosition);
-			GameObject newWood = Instantiate (woodPrefab, pos, Quaternion.identity);
+			Instantiate (woodPrefab, pos, Quaternion.identity);
 			isReady = false;
 			return true;
 		} else

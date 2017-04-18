@@ -49,22 +49,19 @@ public class Rock : AbstractGrid {
 		if (state == State.Freezing) {
 			state = State.Normal;
 			sp.sprite = sprites [0];
-			m_rb.constraints = RigidbodyConstraints2D.None|RigidbodyConstraints2D.FreezeRotation;
 			Debug.Log ("Rock is fired");
 			return true;
 		}
 		return false;
 	}
 	/// <summary>
-	/// 冰冻魔法，冻结, 定在空中，可被王子击碎
+	/// 冰冻魔法，冻结,，可被王子击碎
 	/// </summary>
 	public  override bool OnFreezed()
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
 			sp.sprite = sprites [1];
-			m_rb.velocity = Vector2.zero;
-			m_rb.constraints = RigidbodyConstraints2D.FreezeAll;
 			Debug.Log ("Rock is freezed");
 			return true;
 		}

@@ -6,15 +6,22 @@ public class PedalAndStone : MonoBehaviour {
 
 
 	public MoveTween mt;
+	private Pedal pedal;
+
+	void Awake()
+	{
+		pedal = GetComponent<Pedal> ();
+	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.tag == "Player") {
 
-			if(mt.GetComponent<SnapToGrid>()!=null)
+			if (mt.GetComponent<SnapToGrid> () != null)
 				mt.GetComponent<SnapToGrid> ().isSnapOn = false;
-			
-			mt.isOn = true;
+
+			if(pedal.state == State.Normal)
+				mt.isOn = true;
 		}
 	}
 }

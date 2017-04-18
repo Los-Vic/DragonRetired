@@ -81,7 +81,6 @@ public class Stone : AbstractGrid {
 	/// </summary>
 	public override  bool OnAntiGravity()
 	{
-		Debug.Log ("Stone is antigravity");
 		return false;
 	}
 	public override void InteractWithPrince()

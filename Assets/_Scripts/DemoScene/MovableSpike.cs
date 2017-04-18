@@ -6,36 +6,39 @@ using UnityEngine;
 public class MovableSpike : MonoBehaviour {
 
 	private MoveTween mt;
-	private bool block;
+	private int blockRock;
+	public bool triggered;
 
 	void Start()
 	{
 		mt = GetComponent<MoveTween> ();
+		blockRock = 0;
+		triggered = false;
 	}
 	void FixedUpdate()
 	{
-
-		if (block)
-			mt.isOn = false;
-		block = false;//交由OnTriggerXX函数确定
+		if (triggered) {
+			if (blockRock > 0)
+				mt.isOn = false;
+			else
+				mt.isOn = true;
+		}
+		
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.tag == "Player")
 			LevelManager.Instance.ReloadScene ();
-	}
 
-
-	void OnTriggerStay2D(Collider2D coll)
-	{
 		if (coll.tag == "Rock")
-			block = true;
+			blockRock++;
 	}
+		
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		if (coll.tag == "Rock" && block == false)
-			mt.isOn = true;
+		if (coll.tag == "Rock")
+			blockRock--;
 	}
 
 }
