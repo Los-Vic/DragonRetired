@@ -18,7 +18,7 @@ public class MoveTween : MonoBehaviour {
 		
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		if (isOn) {
 			ClampPos ();

@@ -50,6 +50,7 @@ public class Gel : AbstractGrid {
 				sp.sprite = sprites [2];
 			else
 				sp.sprite = sprites [3];
+			state = State.Firing;
 			StartCoroutine (FireEvent ());
 			Debug.Log ("Gel is fired");
 			return true;

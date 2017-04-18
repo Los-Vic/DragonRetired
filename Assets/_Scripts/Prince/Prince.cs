@@ -95,9 +95,10 @@ public class Prince : AbstractGrid {
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
-		m_rb.gravityScale = 1;
+		m_rb.mass = 1.0f/1.2f;
 		yield return new WaitForSeconds (5);
-		m_rb.gravityScale = 3;
+		m_rb.mass = 1;
+		state = State.Normal;
 		Debug.Log ("Prince antiG end");
 	}
 

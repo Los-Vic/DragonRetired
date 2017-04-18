@@ -73,26 +73,28 @@ public class ElevatorPlaten : AbstractGrid {
 				{
 					if (col.gameObject != gameObject)
 					{
-						Rock myRock = col.GetComponent<Rock> ();  //石头类处理
-						if (myRock) 
+						
+					if (col.tag == "Rock") 
 						{
+							Rock myRock = col.GetComponent<Rock> ();  //石头类处理
 							if (myRock.onElevator) 
 							{
 								Rigidbody2D rb2d = col.GetComponent<Rigidbody2D> ();
 								rbOver.Add (rb2d); //添加到刚体列表，为后面的刚体运动做准备
-								totalMass += rb2d.mass*rb2d.gravityScale;
+								totalMass += rb2d.mass;
 							}
 						} 
 						else
 						{
-							Prince p = col.GetComponent<Prince> (); //王子类处理
-							if (p) 
+							
+						if (col.tag == "Prince") 
 							{
+								Prince p = col.GetComponent<Prince> (); //王子类处理
 								if (p.onElevator) 
 								{
 									Rigidbody2D rb2d = col.GetComponent<Rigidbody2D> ();
 									rbOver.Add (rb2d); //添加到刚体列表，为后面的刚体运动做准备
-									totalMass += rb2d.mass*rb2d.gravityScale;
+									totalMass += rb2d.mass;
 								}
 							}
 						}
@@ -197,7 +199,8 @@ public class ElevatorPlaten : AbstractGrid {
 
 	private IEnumerator AntiGravityEvent()
 	{
-		
+
+		//CaculateTotalMass() 中根据状态确定电梯质量
 		yield return new WaitForSeconds (3);// 3s 反重力效果
 		state = State.Normal;
 		Debug.Log ("platen antiG end");

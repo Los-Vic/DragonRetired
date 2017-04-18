@@ -1,27 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+[System.Serializable]
+public class LightAnimator
+{
+	public AnimationCurve ac;
+	public float period;
+}
+
 //火炬（路灯）类
 public class Torch : AbstractGrid {
 
 	#region Variables
 	private GameObject torchlight;
-	public bool isLightOn;
+	private Material lightMat;
+	public LightAnimator lightAnimator;
+
+	private float timeCount;
 	#endregion
 
 	#region Unity Events
 	void Awake()
 	{
 		torchlight = transform.GetChild (0).gameObject; // 得到灯光物体
+		lightMat =torchlight.GetComponent<Renderer>().material;
 	}
 
 	void Start()
 	{
 		Initialization ();
-		if (isLightOn)
-			state = State.Firing;
 	}
 
+	void Update()
+	{
+		LightAnimation ();
+	}
 	#endregion
 
 	#region Methods
@@ -33,6 +47,7 @@ public class Torch : AbstractGrid {
 	{
 		state = State.Normal;
 		ability = Ability.Flammable | Ability.Freezable;
+		timeCount = 0;
 	}
 	/// <summary>
 	/// 火焰魔法，点燃，灯亮
@@ -70,6 +85,19 @@ public class Torch : AbstractGrid {
 	}
 	public override void InteractWithPrince()
 	{
+	}
+
+	private void LightAnimation()
+	{
+
+		if (timeCount > lightAnimator.period)
+			timeCount = 0;
+	//	Debug.Log (timeCount/lightAnimator.period);
+		float glow = 1.5f*lightAnimator.ac.Evaluate (timeCount/lightAnimator.period);
+		lightMat.SetFloat ("_Glow", glow);
+
+		timeCount += Time.deltaTime;
+
 	}
 	#endregion
 

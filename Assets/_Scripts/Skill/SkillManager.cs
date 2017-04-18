@@ -46,7 +46,7 @@ public class SkillManager : Singleton<SkillManager> {
 	//执行非null技能
 		if (!curSkill.IsNull) {
 			curSkill.ShowIndicator ();
-			if (Input.GetMouseButtonDown (0) && !RectTransformUtility.RectangleContainsScreenPoint(rectOfSkillPanel,Input.mousePosition))
+			if (Input.GetMouseButton (0) && !RectTransformUtility.RectangleContainsScreenPoint(rectOfSkillPanel,Input.mousePosition))
 			if (curSkill.Execute ()) { 
 				skillCounter.AddOne (curSkill.Name);
 

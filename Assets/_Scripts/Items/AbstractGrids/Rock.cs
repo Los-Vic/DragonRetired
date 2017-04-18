@@ -14,7 +14,8 @@ public class Rock : AbstractGrid {
 
 	private Rigidbody2D m_rb;
 	private SpriteRenderer sp;
-	private float originGScale;
+	private float originMass;
+
 
 	//
 	private ParticleSystem ps;
@@ -31,8 +32,6 @@ public class Rock : AbstractGrid {
 	void Start()
 	{
 		Initialization ();
-		originGScale = m_rb.gravityScale;
-
 	}
 	#endregion
 
@@ -40,6 +39,7 @@ public class Rock : AbstractGrid {
 	{
 		state = State.Normal;
 		ability = Ability.Flammable | Ability.Freezable | Ability.AntiGable;
+		originMass = m_rb.mass;
 	}
 	/// <summary>
 	/// 火焰魔法，解冻
@@ -49,7 +49,7 @@ public class Rock : AbstractGrid {
 		if (state == State.Freezing) {
 			state = State.Normal;
 			sp.sprite = sprites [0];
-			m_rb.bodyType = RigidbodyType2D.Dynamic;
+			m_rb.constraints = RigidbodyConstraints2D.None|RigidbodyConstraints2D.FreezeRotation;
 			Debug.Log ("Rock is fired");
 			return true;
 		}
@@ -64,7 +64,7 @@ public class Rock : AbstractGrid {
 			state = State.Freezing;
 			sp.sprite = sprites [1];
 			m_rb.velocity = Vector2.zero;
-			m_rb.bodyType = RigidbodyType2D.Static;
+			m_rb.constraints = RigidbodyConstraints2D.FreezeAll;
 			Debug.Log ("Rock is freezed");
 			return true;
 		}
@@ -93,9 +93,9 @@ public class Rock : AbstractGrid {
 
 	private IEnumerator AntiGravityEvent()
 	{
-		m_rb.gravityScale = originGScale/10.0f;
+		m_rb.mass = originMass/10.0f;
 		yield return new WaitForSeconds (3);// 3s 重力效果减半
-		m_rb.gravityScale = originGScale;
+		m_rb.mass = originMass;
 		state = State.Normal;
 		Debug.Log ("rock antiG end");
 	}
@@ -105,8 +105,8 @@ public class Rock : AbstractGrid {
 	void OnCollisionEnter2D(Collision2D coll)
 	{
 		if (coll != null) {
-			Rock rock = coll.collider.GetComponent<Rock> ();
-			if (rock !=null ) {
+			if (coll.collider.tag == "Rock" ) {
+				Rock rock = coll.collider.GetComponent<Rock> ();
 				if (rock.onElevator == true)
 					onElevator = true;
 			}
