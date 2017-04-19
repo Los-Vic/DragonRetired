@@ -24,7 +24,7 @@ public class HpManager : MonoBehaviour {
 	{
 		if (hp < 1) {
 			hp = 3;
-			LevelManager.Instance.ReloadScene ();
+			LevelManager.Instance.BackToLastCheckPoint ();
 		}
 	}
 	public int Hp

@@ -42,7 +42,8 @@ public class Prince : AbstractGrid {
 	public  override bool OnFired()
 	{
 		if (state == State.Normal) {
-			hpM.HpAdd (-1);
+			state =State.Firing;
+			StartCoroutine (FireEvent ());
 			Debug.Log ("Prince is fired");
 			return true;
 		} else if (state == State.Freezing) {
@@ -77,7 +78,7 @@ public class Prince : AbstractGrid {
 		return false;
 	}
 
-
+	/*
 	/// <summary>
 	/// 计算屏幕坐标，供shader用
 	/// </summary>
@@ -91,7 +92,7 @@ public class Prince : AbstractGrid {
 		pos.x *= (float)Screen.width / Screen.height;
 
 		return pos;
-	}
+	}*/
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
@@ -100,6 +101,15 @@ public class Prince : AbstractGrid {
 		m_rb.mass = 1;
 		state = State.Normal;
 		Debug.Log ("Prince antiG end");
+	}
+
+	//反重力处理
+	private IEnumerator FireEvent()
+	{
+		hpM.HpAdd (-1);
+		yield return new WaitForSeconds (1);
+		state = State.Normal;
+		Debug.Log ("Prince firing end");
 	}
 
 	//转身

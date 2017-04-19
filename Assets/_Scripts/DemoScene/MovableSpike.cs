@@ -29,7 +29,7 @@ public class MovableSpike : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.tag == "Player")
-			LevelManager.Instance.ReloadScene ();
+			LevelManager.Instance.BackToLastCheckPoint ();
 
 		if (coll.tag == "Rock")
 			blockRock++;
