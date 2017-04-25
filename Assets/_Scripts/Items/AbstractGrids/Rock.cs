@@ -61,7 +61,6 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
-			sp.sprite = sprites [1];
 			Debug.Log ("Rock is freezed");
 			return true;
 		}

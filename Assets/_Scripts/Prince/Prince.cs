@@ -43,7 +43,7 @@ public class Prince : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state =State.Firing;
-			StartCoroutine (FireEvent ());
+			//StartCoroutine (FireEvent ());
 			Debug.Log ("Prince is fired");
 			return true;
 		} else if (state == State.Freezing) {
@@ -103,7 +103,7 @@ public class Prince : AbstractGrid {
 		Debug.Log ("Prince antiG end");
 	}
 
-	//反重力处理
+	//火焰处理
 	private IEnumerator FireEvent()
 	{
 		hpM.HpAdd (-1);
@@ -117,10 +117,16 @@ public class Prince : AbstractGrid {
 	{
 		if (h > 0) {
 			faceRight = true;
-			GetComponent<SpriteRenderer> ().flipX = false;
+			Vector3 tmp =transform.localScale;
+			tmp.x = -Mathf.Abs (tmp.x);
+			transform.localScale = tmp;
+			//GetComponent<SpriteRenderer> ().flipX = false;
 		} else if(h<0) {
 			faceRight = false;
-			GetComponent<SpriteRenderer> ().flipX = true;
+			Vector3 tmp =transform.localScale;
+			tmp.x = Mathf.Abs (tmp.x);
+			transform.localScale = tmp;
+			//GetComponent<SpriteRenderer> ().flipX = true;
 		}
 	}
 	public override void InteractWithPrince()
@@ -129,12 +135,12 @@ public class Prince : AbstractGrid {
 	public void Interact()
 	{
 		if (faceRight) {
-			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (1f, 0, 0),LayerMask.GetMask("AbstractGrid"));
+			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (1f, 0.5f, 0),LayerMask.GetMask("AbstractGrid"));
 			if (coll != null) {
 				coll.GetComponent<AbstractGrid> ().InteractWithPrince ();
 			}
 		} else {
-			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (-1f, 0, 0),LayerMask.GetMask("AbstractGrid"));
+			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (-1f, 0.5f, 0),LayerMask.GetMask("AbstractGrid"));
 			if (coll != null) {
 				coll.GetComponent<AbstractGrid> ().InteractWithPrince ();
 			}
@@ -161,7 +167,7 @@ public class Prince : AbstractGrid {
 				//石头下砸到玩家
 				Vector2 dir = tmpRock.transform.position - transform.position;
 
-				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.8f && tmpRock.GetComponent<Rigidbody2D> ().bodyType == RigidbodyType2D.Dynamic) {
+				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f ) {
 					hpM.HpAdd (-1);
 					Destroy (tmpRock.gameObject);
 				}

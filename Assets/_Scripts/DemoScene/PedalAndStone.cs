@@ -5,7 +5,7 @@ using UnityEngine;
 public class PedalAndStone : MonoBehaviour {
 
 
-	public MoveTween mt;
+	public MoveTween[] mts;
 	private Pedal pedal;
 
 	void Awake()
@@ -17,11 +17,13 @@ public class PedalAndStone : MonoBehaviour {
 	{
 		if (coll.tag == "Player") {
 
-			if (mt.GetComponent<SnapToGrid> () != null)
-				mt.GetComponent<SnapToGrid> ().isSnapOn = false;
+			foreach (MoveTween mt in mts) {
+				if (mt.GetComponent<SnapToGrid> () != null)
+					mt.GetComponent<SnapToGrid> ().isSnapOn = false;
 
-			if(pedal.state == State.Normal)
-				mt.isOn = true;
+				if (pedal.state == State.Normal)
+					mt.isOn = true;
+			}
 		}
 	}
 }

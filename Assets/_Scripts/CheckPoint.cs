@@ -8,7 +8,7 @@ public class CheckPoint : MonoBehaviour {
 
 	#region Variable
 
-	private BoxCollider2D boxCollider;
+//	private BoxCollider2D boxCollider;
 	private CheckPointsHolder cpHolder;
 	public int ID;
 	#endregion
@@ -18,7 +18,7 @@ public class CheckPoint : MonoBehaviour {
 	#region Unity Events
 	void Awake() 
 	{
-		boxCollider = GetComponent<BoxCollider2D> ();
+	//	boxCollider = GetComponent<BoxCollider2D> ();
 		cpHolder = FindObjectOfType<CheckPointsHolder> ();
 	}
 	void OnTriggerEnter2D(Collider2D coll)

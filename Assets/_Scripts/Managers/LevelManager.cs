@@ -102,7 +102,10 @@ public class LevelManager : Singleton<LevelManager> {
 	{
 		prince.transform.position = checkPointHolder.checkPoints [checkPointHolder.Index].transform.position;
 		Camera.main.transform.position = prince.transform.position;
-		FindObjectOfType<MovableSpike> ().Reset ();
+
+		MovableSpike ms = FindObjectOfType<MovableSpike> ();
+		if(ms!=null)
+			ms.Reset ();
 	}
 	public void Clear()
 	{
