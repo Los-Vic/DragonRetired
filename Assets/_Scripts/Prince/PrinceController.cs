@@ -10,12 +10,17 @@ public class PrinceController : MonoBehaviour {
 	public float launchForce;//凝胶作用力大小
 	public float climbVelocity;//在梯子上移动的速度
 
-	private Rigidbody2D m_rb;
+	public Rigidbody2D m_rb;
 	public bool onGround;
 	public bool onLadder;
 
+	private PrinceAnimator pAnimator;
 
-	// Use this for initialization
+	void Awake()
+	{
+		pAnimator = GetComponent<PrinceAnimator> ();
+	}
+
 	void Start () {
 		m_rb = GetComponent<Rigidbody2D> ();
 		onLadder = false;
@@ -23,8 +28,10 @@ public class PrinceController : MonoBehaviour {
 
 	void Update()
 	{
-		if (Input.GetKeyDown (KeyCode.J))
+		if (Input.GetKeyDown (KeyCode.J)) {
 			GetComponent<Prince> ().Interact ();
+			pAnimator.PlayAttack ();
+		}
 	}
 
 	void FixedUpdate () {
@@ -74,7 +81,7 @@ public class PrinceController : MonoBehaviour {
 
 	private bool CheckGround()
 	{
-		Collider2D[] colls = Physics2D.OverlapCircleAll (transform.position+new Vector3(0,-0.5f,0),0.1f,LayerMask.GetMask("AbstractGrid","Default"));
+		Collider2D[] colls = Physics2D.OverlapCircleAll (transform.position,0.1f,LayerMask.GetMask("AbstractGrid","Default"));
 
 		foreach (Collider2D coll in colls) {
 			if (coll.gameObject != gameObject && coll.GetComponent<Gel>() == null)

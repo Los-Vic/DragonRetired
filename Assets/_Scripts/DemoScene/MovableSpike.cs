@@ -7,11 +7,13 @@ public class MovableSpike : MonoBehaviour {
 
 	private MoveTween mt;
 	private int blockRock;
+	private Vector3 o_pos;
 	public bool triggered;
 
 	void Start()
 	{
 		mt = GetComponent<MoveTween> ();
+		o_pos = transform.position;
 		blockRock = 0;
 		triggered = false;
 	}
@@ -29,7 +31,7 @@ public class MovableSpike : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.tag == "Player")
-			LevelManager.Instance.ReloadScene ();
+			LevelManager.Instance.BackToLastCheckPoint ();
 
 		if (coll.tag == "Rock")
 			blockRock++;
@@ -40,5 +42,11 @@ public class MovableSpike : MonoBehaviour {
 		if (coll.tag == "Rock")
 			blockRock--;
 	}
-
+	public void Reset()
+	{
+		blockRock = 0;
+		triggered = false;
+		transform.position = o_pos;
+		mt.isOn = false;
+	}
 }

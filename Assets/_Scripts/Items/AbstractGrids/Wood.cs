@@ -75,7 +75,6 @@ public class Wood : AbstractGrid {
 		//Debug.Log ("Wood is freezed");
 		if (state == State.Normal) {
 			state = State.Freezing;
-			sp.sprite = sprites [2];
 			return true;
 		}
 		return false;

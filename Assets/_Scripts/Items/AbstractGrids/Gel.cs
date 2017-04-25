@@ -7,9 +7,10 @@ public class Gel : AbstractGrid {
 
 	#region Variables
 	public Sprite[] sprites; // 0: left , 1:right ,2:fire left, 3:fire right
-	public float explodeForce;
+	//public float explodeForce;
 	[SerializeField]private bool isLeft;
 	private SpriteRenderer sp;
+	public  Animation anima;
 
 	private bool isValid; //避免连续发射
 
@@ -46,10 +47,7 @@ public class Gel : AbstractGrid {
 	public  override bool OnFired()
 	{
 		if (state == State.Normal) {
-			if (isLeft)
-				sp.sprite = sprites [2];
-			else
-				sp.sprite = sprites [3];
+			anima.Play ();
 			state = State.Firing;
 			StartCoroutine (FireEvent ());
 			Debug.Log ("Gel is fired");

@@ -42,7 +42,8 @@ public class Prince : AbstractGrid {
 	public  override bool OnFired()
 	{
 		if (state == State.Normal) {
-			hpM.HpAdd (-1);
+			state =State.Firing;
+			//StartCoroutine (FireEvent ());
 			Debug.Log ("Prince is fired");
 			return true;
 		} else if (state == State.Freezing) {
@@ -77,7 +78,7 @@ public class Prince : AbstractGrid {
 		return false;
 	}
 
-
+	/*
 	/// <summary>
 	/// 计算屏幕坐标，供shader用
 	/// </summary>
@@ -91,7 +92,7 @@ public class Prince : AbstractGrid {
 		pos.x *= (float)Screen.width / Screen.height;
 
 		return pos;
-	}
+	}*/
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
@@ -102,15 +103,30 @@ public class Prince : AbstractGrid {
 		Debug.Log ("Prince antiG end");
 	}
 
+	//火焰处理
+	private IEnumerator FireEvent()
+	{
+		hpM.HpAdd (-1);
+		yield return new WaitForSeconds (1);
+		state = State.Normal;
+		Debug.Log ("Prince firing end");
+	}
+
 	//转身
 	public void TurnAround(float h)
 	{
 		if (h > 0) {
 			faceRight = true;
-			GetComponent<SpriteRenderer> ().flipX = false;
+			Vector3 tmp =transform.localScale;
+			tmp.x = -Mathf.Abs (tmp.x);
+			transform.localScale = tmp;
+			//GetComponent<SpriteRenderer> ().flipX = false;
 		} else if(h<0) {
 			faceRight = false;
-			GetComponent<SpriteRenderer> ().flipX = true;
+			Vector3 tmp =transform.localScale;
+			tmp.x = Mathf.Abs (tmp.x);
+			transform.localScale = tmp;
+			//GetComponent<SpriteRenderer> ().flipX = true;
 		}
 	}
 	public override void InteractWithPrince()
@@ -119,12 +135,12 @@ public class Prince : AbstractGrid {
 	public void Interact()
 	{
 		if (faceRight) {
-			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (1f, 0, 0),LayerMask.GetMask("AbstractGrid"));
+			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (1f, 0.5f, 0),LayerMask.GetMask("AbstractGrid"));
 			if (coll != null) {
 				coll.GetComponent<AbstractGrid> ().InteractWithPrince ();
 			}
 		} else {
-			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (-1f, 0, 0),LayerMask.GetMask("AbstractGrid"));
+			Collider2D coll = Physics2D.OverlapPoint (transform.position + new Vector3 (-1f, 0.5f, 0),LayerMask.GetMask("AbstractGrid"));
 			if (coll != null) {
 				coll.GetComponent<AbstractGrid> ().InteractWithPrince ();
 			}
@@ -151,7 +167,7 @@ public class Prince : AbstractGrid {
 				//石头下砸到玩家
 				Vector2 dir = tmpRock.transform.position - transform.position;
 
-				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.8f && tmpRock.GetComponent<Rigidbody2D> ().bodyType == RigidbodyType2D.Dynamic) {
+				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f ) {
 					hpM.HpAdd (-1);
 					Destroy (tmpRock.gameObject);
 				}

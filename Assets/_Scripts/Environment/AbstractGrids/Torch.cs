@@ -93,7 +93,7 @@ public class Torch : AbstractGrid {
 		if (timeCount > lightAnimator.period)
 			timeCount = 0;
 	//	Debug.Log (timeCount/lightAnimator.period);
-		float glow = 1.5f*lightAnimator.ac.Evaluate (timeCount/lightAnimator.period);
+		float glow = 2.5f*lightAnimator.ac.Evaluate (timeCount/lightAnimator.period);
 		lightMat.SetFloat ("_Glow", glow);
 
 		timeCount += Time.deltaTime;

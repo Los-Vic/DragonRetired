@@ -69,7 +69,6 @@ public class Stone : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
-			sp.sprite = sprites [1];
 			coll.sharedMaterial = smooth;
 			return true;
 //			Debug.Log ("Stone is freezed");
