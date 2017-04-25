@@ -6,18 +6,16 @@ using UnityEngine;
 public class Water : AbstractGrid {
 
 	#region Variables
-	public Sprite[] sprites;//0: normal , 1:ice
 
-	private SpriteRenderer sp;
 	private BoxCollider2D b_coll;
 
 	public bool startWithFreezed;
+	public GameObject iceCube;
 	#endregion
 
 	#region Unity Events
 	void Awake()
 	{
-		sp = GetComponent<SpriteRenderer> ();
 		b_coll = GetComponent<BoxCollider2D> ();
 	}
 	void Start()
@@ -44,7 +42,7 @@ public class Water : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
-			sp.sprite = sprites [0];
+			iceCube.SetActive (false);
 			b_coll.isTrigger = true;
 			Debug.Log ("Water is fired");
 			return true;
@@ -58,7 +56,7 @@ public class Water : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
-			sp.sprite = sprites [1];
+			iceCube.SetActive (true);
 			b_coll.isTrigger = false;
 			Debug.Log ("Water is freezed");
 			return true;

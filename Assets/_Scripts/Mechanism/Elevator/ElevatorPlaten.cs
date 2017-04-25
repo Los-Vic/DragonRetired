@@ -67,7 +67,7 @@ public class ElevatorPlaten : AbstractGrid {
 		rbOver.Clear ();
 		Collider2D[] cols;
 
-		cols = Physics2D.OverlapBoxAll (transform.position + new Vector3 (0, 5f, 0), new Vector2(0.4f,10f) , 0);
+		cols = Physics2D.OverlapBoxAll (transform.position + new Vector3 (0, 4f, 0), new Vector2(0.4f,10f) , 0);
 			if (cols != null)
 				foreach(Collider2D col in cols)
 				{
@@ -87,8 +87,9 @@ public class ElevatorPlaten : AbstractGrid {
 						else
 						{
 							
-						if (col.tag == "Prince") 
+						if (col.tag == "Player") 
 							{
+							//Debug.Log ("got prince");
 								Prince p = col.GetComponent<Prince> (); //王子类处理
 								if (p.onElevator) 
 								{

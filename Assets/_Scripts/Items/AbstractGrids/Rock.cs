@@ -8,12 +8,12 @@ using UnityEngine;
 public class Rock : AbstractGrid {
 
 	#region Variables
-	public Sprite[] sprites; // 0 : normal ; 1: ice
 
 	public bool onElevator; // 是否在盘子上
+	public GameObject iceCube;
 
 	private Rigidbody2D m_rb;
-	private SpriteRenderer sp;
+
 	private float originMass;
 
 
@@ -24,7 +24,7 @@ public class Rock : AbstractGrid {
 	#region Unity Events
 	void Awake()
 	{
-		sp = GetComponent<SpriteRenderer> ();
+
 		m_rb = GetComponent<Rigidbody2D> ();
 		ps = GetComponentInChildren<ParticleSystem> ();
 	}
@@ -48,7 +48,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
-			sp.sprite = sprites [0];
+			iceCube.SetActive (false);
 			Debug.Log ("Rock is fired");
 			return true;
 		}
@@ -61,6 +61,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
+			iceCube.SetActive (true);
 			Debug.Log ("Rock is freezed");
 			return true;
 		}
@@ -119,7 +120,6 @@ public class Rock : AbstractGrid {
 	{
 		
 		ps.Play ();
-		sp.enabled = false;
 		m_rb.simulated = false;
 		StartCoroutine (DestroyDelay());
 	}

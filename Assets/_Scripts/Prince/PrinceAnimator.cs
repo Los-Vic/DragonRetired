@@ -29,10 +29,8 @@ public class PrinceAnimator : MonoBehaviour {
 	void Update () {
 
 		if (!attack) {
-
 			//不在梯子上
 			if (!pc.onLadder) {
-
 				if (jumpRest && uac.animation.isCompleted)
 					jumpRest = false;
 
@@ -47,6 +45,7 @@ public class PrinceAnimator : MonoBehaviour {
 
 					if (Mathf.Abs (rb2d.velocity.x) > 0.1f && Mathf.Abs (rb2d.velocity.x) <= 2f && uac.animation.lastAnimationName != "walk") {
 						uac.animation.timeScale = 1f;
+					
 						uac.animation.GotoAndPlayByFrame ("walk", 0, 0);
 					}
 
@@ -55,22 +54,35 @@ public class PrinceAnimator : MonoBehaviour {
 						uac.animation.GotoAndPlayByFrame ("walk(fast", 0, 0);
 					}
 		
-					if (Mathf.Abs (rb2d.velocity.x) < 0.01f && Mathf.Abs (rb2d.velocity.y) < 0.01f && !uac.animation.lastAnimationName.Contains ("idle")) {
+					if (Mathf.Abs (rb2d.velocity.x) < 0.1f && Mathf.Abs (rb2d.velocity.y) < 0.1f && !uac.animation.lastAnimationName.Contains ("idle")) {
 						uac.animation.timeScale = 1f;
-						uac.animation.GotoAndPlayByFrame ("idle-" + Mathf.Ceil (Random.value * 2f).ToString (), 0, 0);
-		
+						uac.animation.GotoAndPlayByFrame ("idle-1", 0, 0);
+					}
+
+					if (pc.stayTooLong && uac.animation.lastAnimationName != "idle-2") {
+						uac.animation.timeScale = 1f;
+						uac.animation.GotoAndPlayByFrame ("idle-2", 0, 0);
 					}
 
 				} else {
-					if (!pc.onGround && rb2d.velocity.y > 0f && uac.animation.lastAnimationName != "jump-up") {
-						uac.animation.timeScale = 1.5f;
+					/*
+					if (!pc.onGround && rb2d.velocity.y > 4f && uac.animation.lastAnimationName != "jump-up") {
+						uac.animation.timeScale = 2f;
 						uac.animation.GotoAndPlayByFrame ("jump-up", 0, 1);
 			
 					}
+					if (!pc.onGround &&  rb2d.velocity.y<4f && uac.animation.lastAnimationName != "jump-down") {
+						uac.animation.timeScale = 1f;
+						uac.animation.GotoAndPlayByFrame ("jump-down", 0, 1);
+
+					}
+
+
+					*/
 			
 		
-					if (!pc.onGround && rb2d.velocity.y < 0f && uac.animation.lastAnimationName != "jump-down") {
-						uac.animation.timeScale = 1.5f;
+					if (!pc.onGround && uac.animation.lastAnimationName != "jump-down") {
+						uac.animation.timeScale = 1f;
 						uac.animation.GotoAndPlayByFrame ("jump-down", 0, 1);
 
 					}

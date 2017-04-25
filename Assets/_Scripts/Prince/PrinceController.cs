@@ -13,8 +13,10 @@ public class PrinceController : MonoBehaviour {
 	public Rigidbody2D m_rb;
 	public bool onGround;
 	public bool onLadder;
+	public bool stayTooLong; //长时间不动，则为true，调用idle-2动画
 
 	private PrinceAnimator pAnimator;
+	private float duration = 5f; //几秒不动，stayTooLong为true
 
 	void Awake()
 	{
@@ -24,13 +26,32 @@ public class PrinceController : MonoBehaviour {
 	void Start () {
 		m_rb = GetComponent<Rigidbody2D> ();
 		onLadder = false;
+		stayTooLong = false;
 	}
 
 	void Update()
 	{
+		
 		if (Input.GetKeyDown (KeyCode.J)) {
 			GetComponent<Prince> ().Interact ();
 			pAnimator.PlayAttack ();
+		}
+			
+
+		if (Mathf.Abs(m_rb.velocity.x) < 0.1f)
+		{
+			if (!stayTooLong) 
+			{
+				duration -= Time.deltaTime;
+				if (duration < 0) 
+				{
+					stayTooLong = true;
+					duration = 5f;
+				}
+			} 
+		}else {
+			stayTooLong = false;
+			duration = 5f;
 		}
 	}
 

@@ -43,7 +43,7 @@ public class Prince : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state =State.Firing;
-			//StartCoroutine (FireEvent ());
+			StartCoroutine (FireEvent ());
 			Debug.Log ("Prince is fired");
 			return true;
 		} else if (state == State.Freezing) {
@@ -96,9 +96,9 @@ public class Prince : AbstractGrid {
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
-		m_rb.mass = 1.0f/1.2f;
+		m_rb.mass = 1f;
 		yield return new WaitForSeconds (5);
-		m_rb.mass = 1;
+		m_rb.mass = 2f;
 		state = State.Normal;
 		Debug.Log ("Prince antiG end");
 	}
@@ -106,7 +106,7 @@ public class Prince : AbstractGrid {
 	//火焰处理
 	private IEnumerator FireEvent()
 	{
-		hpM.HpAdd (-1);
+		//hpM.HpAdd (-1);
 		yield return new WaitForSeconds (1);
 		state = State.Normal;
 		Debug.Log ("Prince firing end");
@@ -165,7 +165,7 @@ public class Prince : AbstractGrid {
 					onElevator = true;
 				
 				//石头下砸到玩家
-				Vector2 dir = tmpRock.transform.position - transform.position;
+				Vector2 dir = tmpRock.transform.position - (transform.position +Vector3.up*0.6f);
 
 				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f ) {
 					hpM.HpAdd (-1);
@@ -177,8 +177,8 @@ public class Prince : AbstractGrid {
 			//背门砸死
 			if (coll.gameObject.GetComponent<AbstractGrid> () == null && coll.collider.tag !="Ladder") {
 
-				Vector2 dir = coll.transform.position - transform.position;
-				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.8f )
+				Vector2 dir = coll.transform.position - (transform.position+Vector3.up*0.6f);
+				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f )
 				{
 					LevelManager.Instance.ReloadScene ();
 				}

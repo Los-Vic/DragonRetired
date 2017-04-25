@@ -9,6 +9,7 @@ public class Wood : AbstractGrid {
 
 	#region Variables
 	public Sprite[] sprites; //0:normal , 1:fire, 2:ice
+	public GameObject iceCube;
 
 	private SpriteRenderer sp;
 	private Rigidbody2D m_rb;
@@ -57,6 +58,7 @@ public class Wood : AbstractGrid {
 		if (state == State.Freezing) {
 			state = State.Normal;
 			sp.sprite = sprites [0];
+			iceCube.SetActive (false);
 			return true;
 			} 
 		else if (state == State.Normal) {
@@ -75,6 +77,7 @@ public class Wood : AbstractGrid {
 		//Debug.Log ("Wood is freezed");
 		if (state == State.Normal) {
 			state = State.Freezing;
+			iceCube.SetActive (true);
 			return true;
 		}
 		return false;

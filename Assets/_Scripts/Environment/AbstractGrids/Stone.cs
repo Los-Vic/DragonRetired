@@ -8,12 +8,11 @@ public class Stone : AbstractGrid {
 
 	#region 变量
 
-	public Sprite[] sprites; //0:normal 1:ice
 	public PhysicsMaterial2D smooth;//冰冻时切换物理材质
+	public GameObject iceCube;
 
 
 	//获取组件
-	private SpriteRenderer sp;
 	private BoxCollider2D coll;
 
 
@@ -25,7 +24,6 @@ public class Stone : AbstractGrid {
 	#region Unity事件
 	void Awake()
 	{
-		sp = GetComponent<SpriteRenderer> ();
 		coll = GetComponent<BoxCollider2D> ();
 	}
 	void Start()
@@ -54,7 +52,7 @@ public class Stone : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
-			sp.sprite = sprites [0];
+			iceCube.SetActive (false);
 			coll.sharedMaterial = null;  //恢复默认材质
 			Debug.Log ("Stone is fired");
 			return true;
@@ -69,6 +67,7 @@ public class Stone : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
+			iceCube.SetActive (true);
 			coll.sharedMaterial = smooth;
 			return true;
 //			Debug.Log ("Stone is freezed");

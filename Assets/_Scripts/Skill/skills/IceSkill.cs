@@ -8,7 +8,7 @@ public class IceSkill : MonoBehaviour,ISkill{
 	private static string skillName = "Ice";
 	private bool isReady;
 
-	public GameObject iceSprite;
+	//public GameObject iceSprite;
 
 	public Texture2D cursorIcon;
 
@@ -71,7 +71,7 @@ public class IceSkill : MonoBehaviour,ISkill{
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid ();
 			if (coll != null)
 			if (coll.GetComponent<AbstractGrid> ().OnFreezed ()) {
-				Instantiate (iceSprite, coll.transform.position+new Vector3(0,0,-2), Quaternion.identity);
+				//nstantiate (iceSprite, coll.transform.position+new Vector3(0,0,-2), Quaternion.identity);
 				return true;
 			}
 		}
