@@ -17,6 +17,7 @@ public class PedalAndStone : MonoBehaviour {
 	{
 		if (coll.tag == "Player") {
 
+			pedal.pressed = true;
 			foreach (MoveTween mt in mts) {
 				if (mt.GetComponent<SnapToGrid> () != null)
 					mt.GetComponent<SnapToGrid> ().isSnapOn = false;
@@ -25,5 +26,11 @@ public class PedalAndStone : MonoBehaviour {
 					mt.isOn = true;
 			}
 		}
+	}
+
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		if (coll.tag == "Player") 
+			pedal.pressed = false;	
 	}
 }

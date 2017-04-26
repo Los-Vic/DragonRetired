@@ -10,6 +10,7 @@ public class Stone : AbstractGrid {
 
 	public PhysicsMaterial2D smooth;//冰冻时切换物理材质
 	public GameObject iceCube;
+	public Animator fireAni;
 
 
 	//获取组件
@@ -25,6 +26,7 @@ public class Stone : AbstractGrid {
 	void Awake()
 	{
 		coll = GetComponent<BoxCollider2D> ();
+
 	}
 	void Start()
 	{
@@ -52,6 +54,7 @@ public class Stone : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			coll.sharedMaterial = null;  //恢复默认材质
 			Debug.Log ("Stone is fired");

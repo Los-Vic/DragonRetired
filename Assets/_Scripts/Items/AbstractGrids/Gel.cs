@@ -6,11 +6,11 @@ using UnityEngine;
 public class Gel : AbstractGrid {
 
 	#region Variables
-	public Sprite[] sprites; // 0: left , 1:right ,2:fire left, 3:fire right
+	public Sprite[] sprites; // 0: left , 1:right 
+	public Animator fireAni;
 	//public float explodeForce;
 	[SerializeField]private bool isLeft;
 	private SpriteRenderer sp;
-	public  Animation anima;
 
 	private bool isValid; //避免连续发射
 
@@ -47,7 +47,7 @@ public class Gel : AbstractGrid {
 	public  override bool OnFired()
 	{
 		if (state == State.Normal) {
-			anima.Play ();
+			
 			state = State.Firing;
 			StartCoroutine (FireEvent ());
 			Debug.Log ("Gel is fired");
@@ -133,10 +133,14 @@ public class Gel : AbstractGrid {
 
 	private IEnumerator FireEvent()
 	{
+		fireAni.SetTrigger ("Fire");
 		yield return new WaitForSeconds (0.5f);
 		FireNearBy ();
 		yield return new WaitForSeconds (0.5f);
 		Explode ();
+		sp.enabled = false;
+		yield return new WaitForSeconds (0.5f);
+		Destroy (this.gameObject);
 	}
 	/// <summary>
 	/// 爆炸，将邻近的木块摧毁，石头弹开，生物杀死
@@ -152,7 +156,7 @@ public class Gel : AbstractGrid {
 				if (ag != null) {
 					if (ag.GetComponent<Wood> () != null)
 						Destroy (ag.gameObject);
-					else if (ag.GetComponent<Rock> () != null) {
+					else if (ag.tag == "Rock") {
 						//ag.GetComponent<Rigidbody2D> ().AddForce (explodeForce * (ag.transform.position - transform.position).normalized,
 							//ForceMode2D.Impulse);
 							ag.GetComponent<Rock> ().DestroyOnExplosion ();
@@ -160,7 +164,6 @@ public class Gel : AbstractGrid {
 				}
 			}
 		}
-		Destroy (gameObject);
 	}
 		
 	/// <summary>
