@@ -103,7 +103,7 @@ public class LevelManager : Singleton<LevelManager> {
 		prince.transform.position = checkPointHolder.checkPoints [checkPointHolder.Index].transform.position;
 		Camera.main.transform.position = prince.transform.position;
 		FindObjectOfType<HpManager> ().Hp = 3;
-
+		prince.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 		MovableSpike ms = FindObjectOfType<MovableSpike> ();
 		if(ms!=null)
 			ms.Reset ();
