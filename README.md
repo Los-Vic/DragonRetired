@@ -1,5 +1,4 @@
-# README #
+﻿# DragonRetired
 
-Game 王子与龙
+## by Tsinghua University Future ACG
 
-start from 2017/3
