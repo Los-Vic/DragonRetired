@@ -8,7 +8,8 @@ using UnityEngine;
 public class FireSkill :MonoBehaviour,ISkill{
 
 
-	public Texture2D cursorIcon;
+	//public Texture2D cursorIcon;
+	public GameObject fireIndicator;
 
 	private bool isNull;//是否为空技能
 	private static  string skillName = "Fire";
@@ -44,6 +45,7 @@ public class FireSkill :MonoBehaviour,ISkill{
 	{
 		isNull = false;
 		isReady = false;
+		fireIndicator.SetActive (false);
 	}
 
 
@@ -59,7 +61,11 @@ public class FireSkill :MonoBehaviour,ISkill{
 	{
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
-			Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+		//	Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+			fireIndicator.SetActive(true);
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			pos.z = -1;
+			fireIndicator.transform.position = pos;//指示器放在上方
 			isReady = true;
 		}
 		else
@@ -84,7 +90,7 @@ public class FireSkill :MonoBehaviour,ISkill{
 	/// </summary>
 	public void HideIndicator()
 	{
-		Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+		fireIndicator.SetActive (false);
 		isReady = false;
 	}
 	#endregion

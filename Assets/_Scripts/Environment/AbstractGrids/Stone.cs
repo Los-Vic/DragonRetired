@@ -11,7 +11,7 @@ public class Stone : AbstractGrid {
 	public PhysicsMaterial2D smooth;//冰冻时切换物理材质
 	public GameObject iceCube;
 	public Animator fireAni;
-
+	public Animator buff;
 
 	//获取组件
 	private BoxCollider2D coll;
@@ -54,6 +54,7 @@ public class Stone : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			buff.SetTrigger ("Normal");
 			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			coll.sharedMaterial = null;  //恢复默认材质
@@ -71,6 +72,7 @@ public class Stone : AbstractGrid {
 		if (state == State.Normal) {
 			state = State.Freezing;
 			iceCube.SetActive (true);
+			buff.SetTrigger ("Ice");
 			coll.sharedMaterial = smooth;
 			return true;
 //			Debug.Log ("Stone is freezed");

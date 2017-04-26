@@ -18,7 +18,7 @@ public class Gate : MonoBehaviour {
 		if (colls != null) {
 			foreach(Collider2D coll in colls)
 			{
-				if (coll.tag == "Player" || coll.tag == "Rock") {
+				if (coll.tag == "Player" || coll.tag == "Rock"||coll.tag == "Wood") {
 					mt.isOn = false;
 				}
 			} 

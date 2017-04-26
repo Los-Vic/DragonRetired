@@ -10,8 +10,11 @@ public class Prince : AbstractGrid {
 	//private int hp;
 	private Rigidbody2D m_rb;
 	private bool faceRight;
+	private PrinceController pc;
 	private HpManager hpM;
 
+	public Animator buff;
+	public GameObject iceCube;
 	public bool onElevator;
 
 	#endregion
@@ -21,6 +24,7 @@ public class Prince : AbstractGrid {
 	{
 		m_rb = GetComponent<Rigidbody2D> ();
 		hpM = FindObjectOfType<HpManager> ();
+		pc = GetComponent<PrinceController> ();
 	}
 	void Start()
 	{
@@ -43,11 +47,15 @@ public class Prince : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state =State.Firing;
+			buff.SetTrigger ("Fire");
 			StartCoroutine (FireEvent ());
 			Debug.Log ("Prince is fired");
 			return true;
 		} else if (state == State.Freezing) {
 			state = State.Normal;
+			iceCube.SetActive (false);
+			pc.enabled = true;
+			buff.SetTrigger ("Normal");
 			return true;
 		}
 		return false;
@@ -59,6 +67,9 @@ public class Prince : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
+			iceCube.SetActive (true);
+			pc.enabled = false;
+			buff.SetTrigger ("Ice");
 			Debug.Log ("Prince is freezed");
 			return true;
 		}
@@ -71,6 +82,7 @@ public class Prince : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.AntiGing;
+			buff.SetTrigger ("Antig");
 			StartCoroutine (AntiGEvent ());
 			Debug.Log ("Prince is antigravity");
 			return true;
@@ -100,6 +112,7 @@ public class Prince : AbstractGrid {
 		yield return new WaitForSeconds (2);
 		m_rb.mass = 2f;
 		state = State.Normal;
+		buff.SetTrigger ("Normal");
 		Debug.Log ("Prince antiG end");
 	}
 
@@ -109,6 +122,7 @@ public class Prince : AbstractGrid {
 		//hpM.HpAdd (-1);
 		yield return new WaitForSeconds (1);
 		state = State.Normal;
+		buff.SetTrigger ("Normal");
 		Debug.Log ("Prince firing end");
 	}
 

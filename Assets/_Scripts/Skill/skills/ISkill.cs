@@ -10,6 +10,7 @@ public interface ISkill  {
 	string Name {
 		get;
 	}
+
 	void Initialization();
 	void ShowIndicator ();
 	bool Execute(); //成功执行，返回true

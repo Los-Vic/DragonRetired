@@ -8,7 +8,8 @@ public class AntiGSkill : MonoBehaviour,ISkill{
 	private static  string skillName = "AntiG";
 	private bool isReady;
 
-	public Texture2D cursorIcon;
+	//public Texture2D cursorIcon;
+	public GameObject antigIndicator;
 
 
 	public static string GetName()
@@ -42,6 +43,7 @@ public class AntiGSkill : MonoBehaviour,ISkill{
 	{
 		isNull = false;
 		isReady = false;
+		antigIndicator.SetActive (false);
 	}
 
 
@@ -57,7 +59,11 @@ public class AntiGSkill : MonoBehaviour,ISkill{
 	{
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
-			Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+			//Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			pos.z = -1;
+			antigIndicator.transform.position =  pos;
+			antigIndicator.SetActive (true);
 			isReady = true;
 		}
 		else
@@ -82,7 +88,8 @@ public class AntiGSkill : MonoBehaviour,ISkill{
 	public void HideIndicator()
 	{
 		isReady = false;
-		Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+		//Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+		antigIndicator.SetActive(false);
 	}
 
 	#endregion

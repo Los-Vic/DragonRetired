@@ -8,6 +8,7 @@ public class Pedal : AbstractGrid {
 	public GameObject iceCube;
 	public bool startWithIce;
 	public bool pressed;
+	public Animator fireAni;
 
 	private SpriteRenderer sp;
 	private BoxCollider2D boxColl2D;
@@ -52,6 +53,7 @@ public class Pedal : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			iceCube.SetActive (false);
+			fireAni.SetTrigger ("Fire");
 			boxColl2D.isTrigger = true;
 			state = State.Normal;
 			Debug.Log ("pedal is valid now");

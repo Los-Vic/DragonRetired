@@ -7,6 +7,7 @@ public class MovableSpike : MonoBehaviour {
 
 	private MoveTween mt;
 	private int blockRock;
+	private int blockWood;
 	private Vector3 o_pos;
 	public bool triggered;
 
@@ -15,12 +16,13 @@ public class MovableSpike : MonoBehaviour {
 		mt = GetComponent<MoveTween> ();
 		o_pos = transform.position;
 		blockRock = 0;
+		blockWood = 0;
 		triggered = false;
 	}
 	void FixedUpdate()
 	{
 		if (triggered) {
-			if (blockRock > 0)
+			if (blockRock > 0 || blockWood>0)
 				mt.isOn = false;
 			else
 				mt.isOn = true;
@@ -35,16 +37,21 @@ public class MovableSpike : MonoBehaviour {
 
 		if (coll.tag == "Rock")
 			blockRock++;
+		if (coll.tag == "Wood")
+			blockWood++;
 	}
 		
 	void OnTriggerExit2D(Collider2D coll)
 	{
 		if (coll.tag == "Rock")
 			blockRock--;
+		if (coll.tag == "Wood")
+			blockWood--;
 	}
 	public void Reset()
 	{
 		blockRock = 0;
+		blockWood = 0;
 		triggered = false;
 		transform.position = o_pos;
 		mt.isOn = false;

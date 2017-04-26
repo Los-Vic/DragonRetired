@@ -12,7 +12,7 @@ public class Rock : AbstractGrid {
 	public bool onElevator; // 是否在盘子上
 	public GameObject iceCube;
 	public Animator fireAni;
-
+	public Animator buff;
 	private Rigidbody2D m_rb;
 
 	private float originMass;
@@ -48,6 +48,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			buff.SetTrigger ("Normal");
 			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			Debug.Log ("Rock is fired");
@@ -62,6 +63,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
+			buff.SetTrigger ("Ice");
 			iceCube.SetActive (true);
 			Debug.Log ("Rock is freezed");
 			return true;
@@ -75,6 +77,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.AntiGing;
+			buff.SetTrigger ("Antig");
 			Debug.Log ("Rock is antiG");
 			StartCoroutine (AntiGravityEvent ());
 			return true;
@@ -95,6 +98,7 @@ public class Rock : AbstractGrid {
 		yield return new WaitForSeconds (3);// 3s 重力效果减半
 		m_rb.mass = originMass;
 		state = State.Normal;
+		buff.SetTrigger ("Normal");
 		Debug.Log ("rock antiG end");
 	}
 

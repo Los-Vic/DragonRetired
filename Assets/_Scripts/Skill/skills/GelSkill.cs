@@ -40,6 +40,7 @@ public class GelSkill :MonoBehaviour,ISkill{
 	{
 		isNull = false;
 		isReady = false;
+
 	}
 
 
@@ -56,9 +57,9 @@ public class GelSkill :MonoBehaviour,ISkill{
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
 			Vector3 pos = Utility.SnappingGrid (Input.mousePosition);
-
-			gelIndicator.transform.position = pos+new Vector3(0,0,-1);
-			gelIndicator.GetComponent<SpriteRenderer> ().enabled = true;
+			gelIndicator.SetActive (true);
+			gelIndicator.transform.position = pos+new Vector3(0,0,-1);//指示器放在上方
+		
 
 			if (Input.GetKeyDown (KeyCode.Space)) //按空格键更换凝胶的方向
 				gelIndicator.GetComponent<GelIndicator> ().ChangeSprite ();
@@ -66,12 +67,12 @@ public class GelSkill :MonoBehaviour,ISkill{
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid (pos);
 			if (coll == null) {
 				if (FindNearByGelFriend (pos)) {
-					gelIndicator.GetComponent<SpriteRenderer> ().color = Color.blue;
+					gelIndicator.GetComponent<SpriteRenderer> ().color = Color.blue*0.5f;
 					isReady = true;
 				} else
-					gelIndicator.GetComponent<SpriteRenderer> ().color = Color.red;
+					gelIndicator.GetComponent<SpriteRenderer> ().color = Color.red*0.5f;
 			} else
-				gelIndicator.GetComponent<SpriteRenderer> ().color = Color.red;
+				gelIndicator.GetComponent<SpriteRenderer> ().color = Color.red*0.5f;
 		} else
 			HideIndicator ();
 	}
@@ -95,7 +96,7 @@ public class GelSkill :MonoBehaviour,ISkill{
 	public void HideIndicator()
 	{
 		isReady = false;
-		gelIndicator.GetComponent<SpriteRenderer> ().enabled = false;
+		gelIndicator.SetActive (false);
 	}
 
 	#endregion

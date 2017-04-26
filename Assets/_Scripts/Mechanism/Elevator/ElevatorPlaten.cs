@@ -11,6 +11,7 @@ public class ElevatorPlaten : AbstractGrid {
 	public Elevator elevator;
 	public bool isLeft;
 	public float platenWeight;
+	public Animator buff;
 
 	private List<Rigidbody2D> rbOver; //存储盘子上的刚体
 
@@ -190,6 +191,7 @@ public class ElevatorPlaten : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.AntiGing;
+			buff.SetTrigger ("Antig");
 			StartCoroutine (AntiGravityEvent ());
 			return true;
 		}
@@ -202,8 +204,9 @@ public class ElevatorPlaten : AbstractGrid {
 	{
 
 		//CaculateTotalMass() 中根据状态确定电梯质量
-		yield return new WaitForSeconds (3);// 3s 反重力效果
+		yield return new WaitForSeconds (5);// 3s 反重力效果
 		state = State.Normal;
+		buff.SetTrigger ("Normal");
 		Debug.Log ("platen antiG end");
 	}
 	#endregion
