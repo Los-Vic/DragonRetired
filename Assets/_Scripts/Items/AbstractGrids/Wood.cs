@@ -8,8 +8,8 @@ using UnityEngine;
 public class Wood : AbstractGrid {
 
 	#region Variables
-	public Sprite[] sprites; //0:normal , 1:fire, 2:ice
 	public GameObject iceCube;
+	public Animator fireAni;
 
 	private SpriteRenderer sp;
 	private Rigidbody2D m_rb;
@@ -51,20 +51,19 @@ public class Wood : AbstractGrid {
 		ability = Ability.WoodFriendly | Ability.Flammable | Ability.Freezable;
 	}
 	/// <summary>
-	/// 火焰魔法，解冻，燃烧，0.5s后引燃相邻物体，1s后自毁
+	/// 火焰魔法，解冻，燃烧，1s后引燃相邻物体
 	/// </summary>
 	public  override bool OnFired()
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
-			sp.sprite = sprites [0];
 			iceCube.SetActive (false);
 			return true;
 			} 
 		else if (state == State.Normal) {
 			state = State.Firing;
+			fireAni.SetTrigger ("Fire");
 			woodLight.SetActive (true);
-			sp.sprite = sprites [1];
 			return true;
 		}
 		return false;
@@ -122,7 +121,7 @@ public class Wood : AbstractGrid {
 	/// </summary>
 	/// <returns>The event.</returns>
 
-	/*协程太耗性能
+	/*协程太耗性能（是没有正确使用。。。。）
 	private IEnumerator FireEvent()
 	{
 		yield return new WaitForSeconds (0.5f);
@@ -133,11 +132,11 @@ public class Wood : AbstractGrid {
 */
 	private void FireEvent()
 	{
-		if (timeCounter > 0.5 && !fireOnce) {
+		if (timeCounter > 0.5f && !fireOnce) {
 			FireNearBy ();
 			fireOnce = true;
 		}
-		if (timeCounter > 1)
+		if (timeCounter > 1.4f) //不是很有用的部分，因为没设定熄灭火焰
 			this.enabled = false;
 	}
 

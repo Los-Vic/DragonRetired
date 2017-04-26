@@ -11,6 +11,9 @@ public class Water : AbstractGrid {
 
 	public bool startWithFreezed;
 	public GameObject iceCube;
+	public Animator fireAni;
+
+
 	#endregion
 
 	#region Unity Events
@@ -42,6 +45,7 @@ public class Water : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			b_coll.isTrigger = true;
 			Debug.Log ("Water is fired");

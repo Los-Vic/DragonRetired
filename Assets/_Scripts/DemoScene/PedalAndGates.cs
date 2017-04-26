@@ -20,6 +20,7 @@ public class PedalAndGates : MonoBehaviour {
 	{
 		if (pedal.state == State.Normal) {
 			if (coll.tag == "Player" || coll.GetComponent<Rock> () != null) {
+				pedal.pressed = true;
 				mt1.isOn = true;
 				mt1.back = true;
 
@@ -32,6 +33,7 @@ public class PedalAndGates : MonoBehaviour {
 	void OnTriggerExit2D(Collider2D coll)
 	{
 		if (pedal.state == State.Normal) {
+			pedal.pressed = false;
 			if (coll.tag == "Player" || coll.GetComponent<Rock> () != null) {
 				mt1.isOn = true;
 				mt1.back = false;

@@ -11,14 +11,15 @@ public class Rock : AbstractGrid {
 
 	public bool onElevator; // 是否在盘子上
 	public GameObject iceCube;
+	public Animator fireAni;
 
 	private Rigidbody2D m_rb;
 
 	private float originMass;
 
 
-	//
-	private ParticleSystem ps;
+
+
 	#endregion
 
 	#region Unity Events
@@ -26,7 +27,6 @@ public class Rock : AbstractGrid {
 	{
 
 		m_rb = GetComponent<Rigidbody2D> ();
-		ps = GetComponentInChildren<ParticleSystem> ();
 	}
 
 	void Start()
@@ -48,6 +48,7 @@ public class Rock : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			Debug.Log ("Rock is fired");
 			return true;
@@ -118,8 +119,6 @@ public class Rock : AbstractGrid {
 	/// </summary>
 	public void DestroyOnExplosion()
 	{
-		
-		ps.Play ();
 		m_rb.simulated = false;
 		StartCoroutine (DestroyDelay());
 	}
