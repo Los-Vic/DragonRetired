@@ -12,7 +12,7 @@ public class LevelManager : Singleton<LevelManager> {
 	private SkillCounter sc; // 技能计数器
 	private CheckPointsHolder _cpHolder; //alll check points in the scene
 	private Prince _prince;// prince
-	private 
+	 
 
 	#endregion
 	//构造函数

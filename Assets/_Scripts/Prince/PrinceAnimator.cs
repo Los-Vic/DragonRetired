@@ -43,15 +43,14 @@ public class PrinceAnimator : MonoBehaviour {
 
 				if (pc.onGround && !jumpRest) {
 
-					if (Mathf.Abs (rb2d.velocity.x) > 0.1f && Mathf.Abs (rb2d.velocity.x) <= 2f && uac.animation.lastAnimationName != "walk") {
+					if (Mathf.Abs (rb2d.velocity.x) > 0.1f && Mathf.Abs (rb2d.velocity.x) <= 2f && uac.animation.lastAnimationName != "walk(fast") {
 						uac.animation.timeScale = 1f;
 					
-						uac.animation.GotoAndPlayByFrame ("walk", 0, 0);
+						uac.animation.GotoAndPlayByFrame ("walk(fast", 0, 0);
 					}
 
-					if (Mathf.Abs (rb2d.velocity.x) > 2f && uac.animation.lastAnimationName != "walk(fast") {
-						uac.animation.timeScale = 1f;
-						uac.animation.GotoAndPlayByFrame ("walk(fast", 0, 0);
+					if (Mathf.Abs (rb2d.velocity.x) > 2f && uac.animation.lastAnimationName == "walk(fast") {
+						uac.animation.timeScale = 1.5f;
 					}
 		
 					if (Mathf.Abs (rb2d.velocity.x) < 0.1f && Mathf.Abs (rb2d.velocity.y) < 0.1f && !uac.animation.lastAnimationName.Contains ("idle")) {
