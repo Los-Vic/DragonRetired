@@ -96,8 +96,8 @@ public class Prince : AbstractGrid {
 	//反重力处理
 	private IEnumerator AntiGEvent()
 	{
-		m_rb.mass = 1f;
-		yield return new WaitForSeconds (5);
+		m_rb.mass = 1.5f;
+		yield return new WaitForSeconds (2);
 		m_rb.mass = 2f;
 		state = State.Normal;
 		Debug.Log ("Prince antiG end");
@@ -180,7 +180,7 @@ public class Prince : AbstractGrid {
 				Vector2 dir = coll.transform.position - (transform.position+Vector3.up*0.6f);
 				if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f )
 				{
-					LevelManager.Instance.ReloadScene ();
+					LevelManager.Instance.BackToLastCheckPoint ();
 				}
 			}
 
