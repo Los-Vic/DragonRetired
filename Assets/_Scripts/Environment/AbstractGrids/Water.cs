@@ -12,7 +12,7 @@ public class Water : AbstractGrid {
 	public bool startWithFreezed;
 	public GameObject iceCube;
 	public Animator fireAni;
-
+	public Animator buff;
 
 	#endregion
 
@@ -45,6 +45,7 @@ public class Water : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			buff.SetTrigger ("Normal");
 			fireAni.SetTrigger ("Fire");
 			iceCube.SetActive (false);
 			b_coll.isTrigger = true;
@@ -60,6 +61,7 @@ public class Water : AbstractGrid {
 	{
 		if (state == State.Normal) {
 			state = State.Freezing;
+			buff.SetTrigger ("Ice");
 			iceCube.SetActive (true);
 			b_coll.isTrigger = false;
 			Debug.Log ("Water is freezed");

@@ -10,7 +10,8 @@ public class IceSkill : MonoBehaviour,ISkill{
 
 	//public GameObject iceSprite;
 
-	public Texture2D cursorIcon;
+	//public Texture2D cursorIcon;
+	public GameObject iceIndicator;
 
 	public static string GetName()
 	{
@@ -41,6 +42,7 @@ public class IceSkill : MonoBehaviour,ISkill{
 	{
 		isNull = false;
 		isReady = false;
+		iceIndicator.SetActive (false);
 	}
 
 
@@ -56,7 +58,11 @@ public class IceSkill : MonoBehaviour,ISkill{
 	{
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
-			Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+			//Cursor.SetCursor (cursorIcon, new Vector2 (8, 8), CursorMode.Auto);
+			Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			pos.z = -1;
+			iceIndicator.transform.position =  pos ;
+			iceIndicator.SetActive (true);
 			isReady = true;
 		}
 		else
@@ -84,7 +90,8 @@ public class IceSkill : MonoBehaviour,ISkill{
 	public void HideIndicator()
 	{
 		isReady = false;
-		Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+		//Cursor.SetCursor (null, Vector2.zero, CursorMode.Auto);
+		iceIndicator.SetActive(false);
 	}
 	#endregion
 }

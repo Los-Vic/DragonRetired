@@ -52,19 +52,20 @@ public class RockSkill : MonoBehaviour,ISkill{
 	/// </summary>
 	public void ShowIndicator()
 	{
+		
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
 			Vector3 pos = Utility.SnappingGrid (Input.mousePosition);
-
+			rockIndicator.SetActive (true);
 			rockIndicator.transform.position = pos+new Vector3(0,0,-1);
-			rockIndicator.GetComponent<SpriteRenderer> ().enabled = true;
+
 
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid (pos);
 			if (coll == null) {
-				rockIndicator.GetComponent<SpriteRenderer> ().color = Color.blue;
+				rockIndicator.GetComponent<SpriteRenderer> ().color = Color.blue*0.5f;
 				isReady = true;
 			} else
-				rockIndicator.GetComponent<SpriteRenderer> ().color = Color.red;
+				rockIndicator.GetComponent<SpriteRenderer> ().color = Color.red*0.5f;
 		} else
 			HideIndicator ();
 		
@@ -75,7 +76,7 @@ public class RockSkill : MonoBehaviour,ISkill{
 	public void HideIndicator()
 	{
 		isReady = false;
-		rockIndicator.GetComponent<SpriteRenderer> ().enabled = false;
+		rockIndicator.SetActive (false);
 	}
 	/// <summary>
 	/// 执行技能

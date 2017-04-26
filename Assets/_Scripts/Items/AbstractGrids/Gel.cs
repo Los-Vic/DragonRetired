@@ -8,18 +8,20 @@ public class Gel : AbstractGrid {
 	#region Variables
 	public Sprite[] sprites; // 0: left , 1:right 
 	public Animator fireAni;
+	public Animator buff;
 	//public float explodeForce;
 	[SerializeField]private bool isLeft;
 	private SpriteRenderer sp;
 
 	private bool isValid; //避免连续发射
-
+	private GameObject gelLight;
 	#endregion
 
 	#region Unity Events
 	void Awake()
 	{
 		sp = GetComponent<SpriteRenderer> ();
+		gelLight = transform.FindChild ("GelLight").gameObject;
 	}
 	void Start()
 	{
@@ -49,6 +51,8 @@ public class Gel : AbstractGrid {
 		if (state == State.Normal) {
 			
 			state = State.Firing;
+			buff.SetTrigger ("Fire");
+			gelLight.SetActive (true);
 			StartCoroutine (FireEvent ());
 			Debug.Log ("Gel is fired");
 			return true;

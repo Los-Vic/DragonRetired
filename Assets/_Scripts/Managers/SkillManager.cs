@@ -22,6 +22,7 @@ public class SkillManager : Singleton<SkillManager> {
 	private Vector3 forRectUtility;
 
 	private Dictionary<string,ISkill> my_dic; //存储技能的字典
+	private Vector3 preMousePos=Vector3.zero;//上一帧鼠标位置;
 
 	protected SkillManager(){
 	}// 阻止使用new创建
@@ -36,24 +37,34 @@ public class SkillManager : Singleton<SkillManager> {
 	// Update is called once per frame
 	void Update () {
 
+		if (curSkill.IsNull) {
+			Cursor.visible = true;
+		} else
+			Cursor.visible = false;
+
 		//右键取消技能
 		if (Input.GetMouseButtonDown (1)) {
 			curSkill.HideIndicator ();
 			curSkill = my_dic [NullSkill.GetName()];
+			preMousePos = Vector3.zero;
 		}
 
 
 	//执行非null技能
 		if (!curSkill.IsNull) {
 			curSkill.ShowIndicator ();
-			if (Input.GetMouseButton (0) && !RectTransformUtility.RectangleContainsScreenPoint(rectOfSkillPanel,Input.mousePosition))
-			if (curSkill.Execute ()) { 
-				skillCounter.AddOne (curSkill.Name);
+			if (Input.GetMouseButton (0) && !RectTransformUtility.RectangleContainsScreenPoint (rectOfSkillPanel, Input.mousePosition)) {
+				if (Vector3.Magnitude(Input.mousePosition - preMousePos) > 5f)
+				if (curSkill.Execute ()) { 
+					skillCounter.AddOne (curSkill.Name);
+				}
 
+				preMousePos = Input.mousePosition;
 				//成功执行后，变回空技能
 				//curSkill.HideIndicator ();
 				//curSkill = my_dic [NullSkill.GetName ()];
-			}
+			} else
+				preMousePos = Vector3.zero;
 		}
 				
 		

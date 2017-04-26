@@ -58,19 +58,19 @@ public class WoodSkill : MonoBehaviour,ISkill{
 		isReady = false;
 		if (Utility.WithinLightRange ()) {
 			Vector3 pos = Utility.SnappingGrid (Input.mousePosition);
+			woodIndicator.SetActive (true);
+			woodIndicator.transform.position = pos+new Vector3(0,0,-1); //指示器放在上方
 
-			woodIndicator.transform.position = pos+new Vector3(0,0,-1);
-			woodIndicator.GetComponent<SpriteRenderer> ().enabled = true;
 
 			Collider2D coll = Utility.GetMouseTargetAbstractGrid (pos);
 			if (coll == null) {
 				if (FindNearByWoodFriend (pos)) {
-					woodIndicator.GetComponent<SpriteRenderer> ().color = Color.blue;
+					woodIndicator.GetComponent<SpriteRenderer> ().color = Color.blue*0.5f;
 					isReady = true;
 				} else
-					woodIndicator.GetComponent<SpriteRenderer> ().color = Color.red;
+					woodIndicator.GetComponent<SpriteRenderer> ().color = Color.red*0.5f;
 			} else
-				woodIndicator.GetComponent<SpriteRenderer> ().color = Color.red;
+				woodIndicator.GetComponent<SpriteRenderer> ().color = Color.red*0.5f;
 		} else
 			HideIndicator ();
 
@@ -94,7 +94,7 @@ public class WoodSkill : MonoBehaviour,ISkill{
 	public void HideIndicator()
 	{
 		isReady = false;
-		woodIndicator.GetComponent<SpriteRenderer> ().enabled = false;
+		woodIndicator.SetActive (false);
 	}
 
 	#endregion

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //木块类
-[RequireComponent(typeof(Rigidbody2D))]
+
 [RequireComponent(typeof(BoxCollider2D))]
 public class Wood : AbstractGrid {
 
 	#region Variables
 	public GameObject iceCube;
 	public Animator fireAni;
+	public Animator buff;
 
-	private SpriteRenderer sp;
-	private Rigidbody2D m_rb;
+
 	private float timeCounter;
 	private bool fireOnce;
 	private GameObject woodLight;
@@ -22,13 +22,12 @@ public class Wood : AbstractGrid {
 	#region Unity Events
 	void Awake()
 	{
-		sp = GetComponent<SpriteRenderer> ();
 		woodLight = transform.FindChild ("WoodLight").gameObject;
 	}
 	void Start()
 	{
 		
-		m_rb = GetComponent<Rigidbody2D> ();
+
 		timeCounter = 0;
 		fireOnce = false; //避免重复多次搜寻周围物体
 
@@ -57,11 +56,13 @@ public class Wood : AbstractGrid {
 	{
 		if (state == State.Freezing) {
 			state = State.Normal;
+			buff.SetTrigger ("Normal");
 			iceCube.SetActive (false);
 			return true;
 			} 
 		else if (state == State.Normal) {
 			state = State.Firing;
+			buff.SetTrigger ("Fire");
 			fireAni.SetTrigger ("Fire");
 			woodLight.SetActive (true);
 			return true;
@@ -76,6 +77,7 @@ public class Wood : AbstractGrid {
 		//Debug.Log ("Wood is freezed");
 		if (state == State.Normal) {
 			state = State.Freezing;
+			buff.SetTrigger ("Ice");
 			iceCube.SetActive (true);
 			return true;
 		}
@@ -86,13 +88,14 @@ public class Wood : AbstractGrid {
 	/// </summary>
 	public override  bool OnAntiGravity()
 	{
+		/*
 		//Debug.Log ("Wood is antiG");
 		if(state == State.Normal)
 		{
 			state = State.AntiGing;
 			StartCoroutine (AntiGravityEvent()); // 2s 重力效果减半
 			return true;
-		}
+		}*/
 		return false;
 	}
 	public override void InteractWithPrince()
@@ -146,9 +149,8 @@ public class Wood : AbstractGrid {
 
 	private IEnumerator AntiGravityEvent()
 	{
-		m_rb.gravityScale = 0.5f;
 		yield return new WaitForSeconds (2);
-		m_rb.gravityScale = 1f;
+
 		state = State.Normal;
 	}
 	void OnDisable() //组件disable时，摧毁该对象
