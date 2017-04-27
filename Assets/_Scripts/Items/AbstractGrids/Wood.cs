@@ -16,6 +16,7 @@ public class Wood : AbstractGrid {
 	private float timeCounter;
 	private bool fireOnce;
 	private GameObject woodLight;
+	public bool holdPrince = false;
 
 	#endregion
 
@@ -48,6 +49,7 @@ public class Wood : AbstractGrid {
 	{
 		state = State.Normal;
 		ability = Ability.WoodFriendly | Ability.Flammable | Ability.Freezable;
+		GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 	}
 	/// <summary>
 	/// 火焰魔法，解冻，燃烧，1s后引燃相邻物体

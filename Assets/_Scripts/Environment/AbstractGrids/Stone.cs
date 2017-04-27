@@ -74,6 +74,7 @@ public class Stone : AbstractGrid {
 			iceCube.SetActive (true);
 			buff.SetTrigger ("Ice");
 			coll.sharedMaterial = smooth;
+			GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 			return true;
 //			Debug.Log ("Stone is freezed");
 		}

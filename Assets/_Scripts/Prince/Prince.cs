@@ -109,7 +109,7 @@ public class Prince : AbstractGrid {
 	private IEnumerator AntiGEvent()
 	{
 		m_rb.mass = 1.5f;
-		yield return new WaitForSeconds (2);
+		yield return new WaitForSeconds (5);
 		m_rb.mass = 2f;
 		state = State.Normal;
 		buff.SetTrigger ("Normal");
@@ -161,6 +161,45 @@ public class Prince : AbstractGrid {
 		}
 	}
 
+	void OnCollisionStay2D(Collision2D coll)
+	{
+		Rock tmpRock = coll.collider.GetComponent<Rock> (); 
+
+		if (tmpRock != null) {
+
+
+			if (tmpRock.onElevator) //踩在电梯的石头上
+				onElevator = true;
+
+			//石头下砸到玩家
+			Vector2 dir = tmpRock.transform.position - (transform.position +Vector3.up*0.6f);
+
+			if (Vector2.Dot (dir.normalized, Vector2.up) > 0.9f ) {
+				hpM.HpAdd (-1);
+				Destroy (tmpRock.gameObject);
+			}
+
+			GameObject.FindObjectOfType<PrinceController> ().obstacle = tmpRock.gameObject;
+			Debug.Log ("obstacle");
+		}
+
+		Wood tmpWood = coll.collider.GetComponent<Wood> ();
+		if (tmpWood != null) {
+			foreach (ContactPoint2D c in coll.contacts)
+			{
+				//Debug.Log (c.point.y - tmpWood.transform.position.y);
+				if ((c.point.y - tmpWood.transform.position.y) < 0) {
+					GameObject.FindObjectOfType<PrinceController> ().obstacle = tmpWood.gameObject;
+					Debug.Log ("obstacle");
+					break;
+				}
+			}
+		}
+
+		Treasure tmpTreasure = coll.collider.GetComponent<Treasure> ();
+		if (tmpTreasure != null)
+			Interact ();
+	}
 
 	void OnCollisionEnter2D(Collision2D coll)
 	{
@@ -186,7 +225,30 @@ public class Prince : AbstractGrid {
 					Destroy (tmpRock.gameObject);
 				}
 
+				GameObject.FindObjectOfType<PrinceController> ().obstacle = tmpRock.gameObject;
+				Debug.Log ("obstacle");
 			}
+
+			Wood tmpWood = coll.collider.GetComponent<Wood> ();
+			if (tmpWood != null) {
+				coll.collider.GetComponent<Wood> ().holdPrince = true;
+				foreach (ContactPoint2D c in coll.contacts)
+				{
+					//Debug.Log (c.point.y - tmpWood.transform.position.y);
+					if ((c.point.y - tmpWood.transform.position.y) < 0) {
+						GameObject.FindObjectOfType<PrinceController> ().obstacle = tmpWood.gameObject;
+						coll.collider.GetComponent<Wood> ().holdPrince = false;
+						Debug.Log ("obstacle");
+						break;
+					}
+				}
+				if (coll.collider.GetComponent<Wood> ().holdPrince)
+					GameObject.FindObjectOfType<PrinceController> ().onWood = true;
+			}
+
+			Treasure tmpTreasure = coll.collider.GetComponent<Treasure> ();
+			if (tmpTreasure != null)
+				Interact ();
 
 			//背门砸死
 			if (coll.gameObject.GetComponent<AbstractGrid> () == null && coll.collider.tag !="Ladder") {
@@ -216,6 +278,10 @@ public class Prince : AbstractGrid {
 				if (tmpRock.onElevator) //离开电梯的石头上
 					onElevator = false;
 			}
+
+			Wood tmpWood = coll.collider.GetComponent<Wood> ();
+			if (tmpWood != null && coll.collider.GetComponent<Wood> ().holdPrince) 
+				GameObject.FindObjectOfType<PrinceController> ().onWood = false;
 		}
 
 	}

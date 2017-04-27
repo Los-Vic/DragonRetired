@@ -65,6 +65,8 @@ public class Water : AbstractGrid {
 			iceCube.SetActive (true);
 			b_coll.isTrigger = false;
 			Debug.Log ("Water is freezed");
+
+			GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 			return true;
 		}
 		return false;

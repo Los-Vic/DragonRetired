@@ -50,7 +50,6 @@ public class LevelManager : Singleton<LevelManager> {
 	void Start()
 	{
 		sc = FindObjectOfType<SkillManager> ().skillCounter;
-		sceneMenu.SetActive (false);
 		if (sc == null)
 			Debug.Log ("cann't find skillCounter");
 	}
@@ -104,7 +103,7 @@ public class LevelManager : Singleton<LevelManager> {
 		prince.transform.position = checkPointHolder.checkPoints [checkPointHolder.Index].transform.position;
 		Camera.main.transform.position = prince.transform.position;
 		FindObjectOfType<HpManager> ().Hp = 3;
-		prince.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
+
 		MovableSpike ms = FindObjectOfType<MovableSpike> ();
 		if(ms!=null)
 			ms.Reset ();

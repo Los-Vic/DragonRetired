@@ -15,8 +15,8 @@ public class PedalAndStone : MonoBehaviour {
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
-
 		if (coll.tag == "Player") {
+
 			pedal.pressed = true;
 			foreach (MoveTween mt in mts) {
 				if (mt.GetComponent<SnapToGrid> () != null)

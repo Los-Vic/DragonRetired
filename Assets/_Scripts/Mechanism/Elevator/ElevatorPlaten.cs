@@ -193,6 +193,7 @@ public class ElevatorPlaten : AbstractGrid {
 			state = State.AntiGing;
 			buff.SetTrigger ("Antig");
 			StartCoroutine (AntiGravityEvent ());
+			GameObject.FindObjectOfType<PrinceController> ().elevator = 100;
 			return true;
 		}
 		return false;

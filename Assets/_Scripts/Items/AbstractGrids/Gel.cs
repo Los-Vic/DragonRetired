@@ -41,6 +41,8 @@ public class Gel : AbstractGrid {
 		state = State.Normal;
 		ability = Ability.Flammable;
 		isValid = true;
+
+		GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 	}
 
 	/// <summary>
@@ -97,6 +99,7 @@ public class Gel : AbstractGrid {
 		if (coll != null) {
 			StartCoroutine(LaunchDelay(coll.GetComponent<PrinceController>()));
 			StartCoroutine (CoolDown ());
+			coll.GetComponent<PrinceController> ().makeDecision ();
 		}
 	}
 

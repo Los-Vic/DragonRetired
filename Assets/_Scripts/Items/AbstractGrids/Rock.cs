@@ -40,6 +40,8 @@ public class Rock : AbstractGrid {
 		state = State.Normal;
 		ability = Ability.Flammable | Ability.Freezable | Ability.AntiGable;
 		originMass = m_rb.mass;
+
+		//GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 	}
 	/// <summary>
 	/// 火焰魔法，解冻
@@ -66,6 +68,8 @@ public class Rock : AbstractGrid {
 			buff.SetTrigger ("Ice");
 			iceCube.SetActive (true);
 			Debug.Log ("Rock is freezed");
+
+			GameObject.FindObjectOfType<PrinceController> ().newObj = this.gameObject;
 			return true;
 		}
 		return false;
