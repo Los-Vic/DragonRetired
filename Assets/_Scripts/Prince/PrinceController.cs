@@ -47,7 +47,7 @@ public class PrinceController : MonoBehaviour {
 			direction = 1;
 		else
 			direction = -1;
-		Debug.Log (direction.ToString() + "!");
+//		Debug.Log (direction.ToString() + "!");
 	}
 
 	void Start () {
@@ -260,11 +260,11 @@ public class PrinceController : MonoBehaviour {
 
 		foreach (Collider2D coll in colls) {
 			if (coll.gameObject != gameObject && coll.GetComponent<Wood> () != null) { 
-				Debug.Log ("Has wood!");
+	//			Debug.Log ("Has wood!");
 				return true;	
 			}
 		}
-		Debug.Log ("No Wood!");
+//		Debug.Log ("No Wood!");
 		return false;
 	}
 
@@ -277,7 +277,7 @@ public class PrinceController : MonoBehaviour {
 		foreach (Collider2D coll in colls)
 			if (coll.gameObject != gameObject && coll.GetComponent<Spikeweed> () == null) 
 				return true;	
-		Debug.Log ("Spikeweed!");
+	//	Debug.Log ("Spikeweed!");
 
 		return false;
 	}
