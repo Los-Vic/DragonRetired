@@ -15,7 +15,7 @@ public class AutoLoadNextScene : MonoBehaviour {
 
 	IEnumerator LoadNextScene()
 	{
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(0.25f);
 		canvas.SetActive (true);
 		LevelManager.Instance.ToScene (1);
 	}

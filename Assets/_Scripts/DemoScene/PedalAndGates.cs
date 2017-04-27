@@ -16,7 +16,7 @@ public class PedalAndGates : MonoBehaviour {
 
 
 
-	void OnTriggerEnter2D(Collider2D coll)
+	void OnTriggerStay2D(Collider2D coll)
 	{
 		if (pedal.state == State.Normal) {
 			if (coll.tag == "Player" || coll.GetComponent<Rock> () != null) {

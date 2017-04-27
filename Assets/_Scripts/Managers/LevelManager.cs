@@ -50,6 +50,7 @@ public class LevelManager : Singleton<LevelManager> {
 	void Start()
 	{
 		sc = FindObjectOfType<SkillManager> ().skillCounter;
+		sceneMenu.SetActive (false);
 		if (sc == null)
 			Debug.Log ("cann't find skillCounter");
 	}
