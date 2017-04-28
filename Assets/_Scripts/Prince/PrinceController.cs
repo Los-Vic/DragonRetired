@@ -124,8 +124,11 @@ public class PrinceController : MonoBehaviour {
 				}
 
 				if (obstacle != null) {
-					if (obstacle.GetComponent<AbstractGrid> ().state == State.Freezing)
+					if (obstacle.GetComponent<AbstractGrid> ().state == State.Freezing) {
 						GameObject.FindObjectOfType<Prince> ().Interact ();
+						pAnimator.PlayAttack ();
+						StartCoroutine (WaitAMoment ());
+					}
 					if (obstacle.GetComponent<AbstractGrid> ().state == State.Firing)
 						state = 2;
 					else
@@ -311,5 +314,12 @@ public class PrinceController : MonoBehaviour {
 					transform.position -=  Vector3.up * climbVelocity * Time.fixedDeltaTime;
 			//Debug.Log ("Ladder");
 		}
+	}
+
+	private IEnumerator WaitAMoment()
+	{
+		this.enabled = false;
+		yield return new WaitForSeconds (0.5f);
+		this.enabled = true;
 	}
 }
