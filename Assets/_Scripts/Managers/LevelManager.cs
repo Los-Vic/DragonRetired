@@ -103,7 +103,7 @@ public class LevelManager : Singleton<LevelManager> {
 	{
 		prince.transform.position = checkPointHolder.checkPoints [checkPointHolder.Index].transform.position;
 		Camera.main.transform.position = prince.transform.position;
-		FindObjectOfType<HpManager> ().Hp = 3;
+		FindObjectOfType<HpManager> ().ResetHp ();
 		prince.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
 		prince.GetComponent<PrinceController> ().enabled = true;
 		MovableSpike ms = FindObjectOfType<MovableSpike> ();
@@ -127,7 +127,7 @@ public class LevelManager : Singleton<LevelManager> {
 		pa.enabled = false;
 		uac.animation.GotoAndPlayByFrame ("die",0,1);
 
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (1f);
 		pc.enabled = true;
 		pa.enabled = true;
 		LevelManager.Instance.BackToLastCheckPoint ();
@@ -142,7 +142,7 @@ public class LevelManager : Singleton<LevelManager> {
 		pa.enabled = false;
 		uac.animation.GotoAndPlayByFrame ("drown",0,1);
 
-		yield return new WaitForSeconds (2f);
+		yield return new WaitForSeconds (1f);
 		pc.enabled = true;
 		pa.enabled = true;
 		LevelManager.Instance.BackToLastCheckPoint ();

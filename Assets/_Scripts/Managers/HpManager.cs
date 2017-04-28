@@ -8,26 +8,24 @@ using UnityEngine.SceneManagement;
 public class HpManager : MonoBehaviour {
 
 	private int hp;
-	public Text hpText;
+	public Image[] images;
 
 	// Use this for initialization
 	void Start () {
 		hp = 3;
+		foreach (Image im in images) {
+			im.enabled = true;
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		hpText .text = hp.ToString ();
 
 	}
 	void LateUpdate()
 	{
-		if (hp < 1) {
-			hp = 3;
-			StartCoroutine (LevelManager.Instance.PlayDie ());
-		//	LevelManager.Instance.BackToLastCheckPoint ();
-		}
+
 	}
 	public int Hp
 	{
@@ -41,8 +39,21 @@ public class HpManager : MonoBehaviour {
 	public void HpAdd(int i)
 	{
 		hp += i;
+		//Debug.LogWarning (hp);
+
+		for (int j = 0; j < 3; j++) {
+			if (j < hp)
+				images [j].enabled = true;
+			else
+				images [j].enabled = false;
+		}
+
 		if (i == -1&&hp>0)
 			StartCoroutine (PlayHit ());
+		if (hp < 1) {
+			StartCoroutine (LevelManager.Instance.PlayDie ());
+			//	LevelManager.Instance.BackToLastCheckPoint ();
+		}
 	}
 
 
@@ -60,5 +71,12 @@ public class HpManager : MonoBehaviour {
 		pc.enabled = true;
 		pa.enabled = true;
 	}
+	public void ResetHp()
+	{
+		hp = 3;
+		foreach (Image im in images) {
+			im.enabled = true;
+		}
 
+	}
 }
