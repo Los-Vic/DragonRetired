@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DragonBones;
 
 public class LevelManager : Singleton<LevelManager> {
 
@@ -104,6 +105,7 @@ public class LevelManager : Singleton<LevelManager> {
 		Camera.main.transform.position = prince.transform.position;
 		FindObjectOfType<HpManager> ().Hp = 3;
 		prince.GetComponent<Rigidbody2D> ().velocity = Vector2.zero;
+		prince.GetComponent<PrinceController> ().enabled = true;
 		MovableSpike ms = FindObjectOfType<MovableSpike> ();
 		if(ms!=null)
 			ms.Reset ();
@@ -114,5 +116,37 @@ public class LevelManager : Singleton<LevelManager> {
 		_cpHolder = null;
 		sc.Reset (); //技能计数清零
 	}
+
+	public IEnumerator PlayDie()
+	{
+		PrinceController pc = FindObjectOfType<PrinceController> ();
+		UnityArmatureComponent uac = pc.GetComponent<UnityArmatureComponent> ();
+		PrinceAnimator pa = pc.GetComponent<PrinceAnimator> ();
+
+		pc.enabled = false;
+		pa.enabled = false;
+		uac.animation.GotoAndPlayByFrame ("die",0,1);
+
+		yield return new WaitForSeconds (2f);
+		pc.enabled = true;
+		pa.enabled = true;
+		LevelManager.Instance.BackToLastCheckPoint ();
+	}
+	public IEnumerator PlayDrown()
+	{
+		PrinceController pc = FindObjectOfType<PrinceController> ();
+		UnityArmatureComponent uac = pc.GetComponent<UnityArmatureComponent> ();
+		PrinceAnimator pa = pc.GetComponent<PrinceAnimator> ();
+
+		pc.enabled = false;
+		pa.enabled = false;
+		uac.animation.GotoAndPlayByFrame ("drown",0,1);
+
+		yield return new WaitForSeconds (2f);
+		pc.enabled = true;
+		pa.enabled = true;
+		LevelManager.Instance.BackToLastCheckPoint ();
+	}
+
 
 }
